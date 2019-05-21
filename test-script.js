@@ -122,10 +122,3 @@ const CD = new GE.CayleyDiagram( GE.Library.map.get( 'S_3' ) );
 // You could also do new GE.CayleyDiagram( group, diagramName );
 // Here you could do CD.setStrategies( [ [ ... ], ... ] );
 showCayleyDiagram( CD );
-
-// To do:
-// - finish Cayley diagram output routine
-// - add Symmetry Object output routine
-
-// Known issues:
-// - no XSLTProcessor available for mathml2text; import one???
