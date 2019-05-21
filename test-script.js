@@ -23,8 +23,8 @@ const GE = require( './ge-lib.js' );
 // GE.Library.loadAllFromFilesystem();
 
 //// How to load individual groups (these are just examples):
-// GE.Library.loadFromFilesystem( './groups/Z_10.group' );
-// GE.Library.loadFromFilesystem( './groups/A_4.group' );
+// GE.Library.loadByName( 'Z_10' );
+// GE.Library.loadByName( 'A_4' );
 
 //// Utility function for displaying a group:
 const showGroup = g => {
@@ -38,7 +38,7 @@ const showGroup = g => {
 };
 
 //// How to fetch a group
-// showGroup( GE.Library.map.get( 'A_4' ) );
+// showGroup( GE.Library.getByName( 'A_4' ) );
 
 //// How to look up a group using IsomorphicGroups:
 // const z3mt = [ [ 0, 1, 2 ], [ 1, 2, 0 ], [ 2, 0, 1 ] ];
@@ -74,7 +74,7 @@ const showMultTable = mt => {
 };
 
 //// How to create the multiplication table for a group:
-// const MT = new GE.Multtable( GE.Library.map.get( 'V_4' ) );
+// const MT = new GE.Multtable( GE.Library.getByName( 'V_4' ) );
 // showMultTable( MT );
 
 //// Utility function for displaying a Cayley graph:
@@ -107,8 +107,8 @@ const showCayleyDiagram = ( cd, precision = 3 ) => {
 };
 
 //// How to create the multiplication table for a group:
-// GE.Library.loadFromFilesystem( './groups/S_3.group' );
-// const CD = new GE.CayleyDiagram( GE.Library.map.get( 'S_3' ) );
+// GE.Library.loadByName( 'S_3' );
+// const CD = new GE.CayleyDiagram( GE.Library.getByName( 'S_3' ) );
 // showCayleyDiagram( CD );
 
 //// Utility function for displaying a symmetry object:
@@ -127,9 +127,8 @@ const showSymmetryObject = ( so, precision = 3 ) => {
 };
 
 //// How to create the multiplication table for a group:
-GE.Library.loadFromFilesystem( './groups/A_4.group' );
-const A_4 = GE.Library.map.get( 'A_4' );
-const SO = GE.SymmetryObject.generate( A_4, A_4.symmetryObjects[0].name );
-showSymmetryObject( SO );
+// const A_4 = GE.Library.loadByName( 'A_4' );
+// const SO = GE.SymmetryObject.generate( A_4, A_4.symmetryObjects[0].name );
+// showSymmetryObject( SO );
 
-console.log( GE.Library.map.keys() );
+console.log( GE.Library.allGroupNamesInFilesystem() );

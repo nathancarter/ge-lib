@@ -1,13 +1,6 @@
 
 # To-do list
 
- * Fix the fact that you have to pass a full path to a group.
-   Instead:
-    * Write a function that returns all names you *could* load.
-    * Improve the `loadAllFromFilesystem` function to accept just
-      the group file basename.
-    * Update existing documentation and test files to do this.
-
 ## Cycle graphs
 
  * Write a `CycleGraphSVG` class that accepts a `CycleGraph` in its
@@ -92,6 +85,10 @@ displayDiagram.camera.matrix.toArray()
    can render to a string or to a file.
  * Add to the `.md` doc all information from Cayley diagrams that is
    still relevant here (zoom, line thickness, node radius, fog).
+
+## Finding groups
+
+Don't forget to document the `GE.IsomorphicGroups` features as well.
 
 ## Known issues
 

@@ -4,24 +4,16 @@
 This file will document how to use `ge-lib.js` to draw cycle graphs.
 This is a first draft, so expect rough edges.
 
-## Setup
+This file expects that you have read the
+[Basic API](basic-api.md) document.
 
-To start using the module, load it, plus at least one group:
-
-```js
-const GE = require( 'ge-lib.js' );
-const Z_5 = GE.Library.loadFromFilesystem( './groups/Z_5.group' );
-// or to load all groups, which takes 2-3 seconds:
-// GE.Library.loadAllFromFilesystem();
-// you can then see all group names with GE.Library.map.keys()
-// and fetch individual ones with GE.Library.map.get( basename ).
-```
+## Construction
 
 To create a cycle graph, just pass a group object to the `CycleGraph`
 constructor:
 
 ```js
-const cg = new GE.CycleGraph( Z_5 );
+const cg = new GE.CycleGraph( GE.Library.loadByName( 'Z_5' ) );
 ```
 
 ## Properties
