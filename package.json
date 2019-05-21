@@ -4,9 +4,11 @@
   "description": "A node.js module for accessing Group Explorer's core functionality",
   "main": "ge-lib.js",
   "dependencies": {
+    "@svgdotjs/svg.js": "^3.0.12",
     "jquery": "^3.4.1",
     "jsdom": "^15.1.0",
     "node-localstorage": "^1.3.1",
+    "svgdom": "0.0.20",
     "three": "^0.104.0"
   },
   "devDependencies": {},
