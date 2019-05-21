@@ -47,38 +47,6 @@ const showGroup = g => {
 // showGroup( z3orig );
 
 //// Utility function for displaying a cycle graph:
-const showCycleGraph = ( cg, precision = 3 ) => {
-    const f = n => Number( n ).toFixed( precision );
-    console.log( `Cycle graph for "${cg.group.shortName}":` );
-    console.log( `\tBounding box: (${f(cg.bbox.left)},${f(cg.bbox.top)})--`
-               + `(${f(cg.bbox.right)},${f(cg.bbox.bottom)})` );
-    console.log( '\tElement positions:' );
-    cg.group.elements.map( a => {
-        const x = cg.positions[a].x;
-        const y = cg.positions[a].y;
-        var color = '';
-        if ( cg.highlights.background )
-            color += ', bkgd:' + cg.highlights.background[a];
-        if ( cg.highlights.border )
-            color += ', bord:' + cg.highlights.border[a];
-        if ( cg.highlights.top )
-            color += ', top:' + cg.highlights.top[a];
-        console.log( `\t\t${a} is at (${f(x)},${f(y)})${color}` );
-    } );
-    cg.cyclePaths.map( path => {
-        console.log( `\tPart ${path.partIndex}, Cycle ${path.cycleIndex} `
-                   + `(${path.cycle.join(',')}), Path ${path.pathIndex}:` );
-        console.log( '\t\t' + path.map( point =>
-            `(${f(point.x)},${f(point.y)})` ).join( '--' ) );
-    } );
-};
-
-//// How to create the cycle graph for a group:
-// const CG = new GE.CycleGraph( GE.Library.map.get( 'Z_3' ) );
-// CG.highlightByBackground( [ [ 0 ], [ 1, 2 ] ] );
-// showCycleGraph( CG, 2 );
-
-//// Utility function for displaying a cycle graph:
 const showMultTable = mt => {
     console.log( `Multiplication Table for "${mt.group.shortName}"`
                + ` (${mt.size}x${mt.size}):` );
@@ -163,3 +131,5 @@ GE.Library.loadFromFilesystem( './groups/A_4.group' );
 const A_4 = GE.Library.map.get( 'A_4' );
 const SO = GE.SymmetryObject.generate( A_4, A_4.symmetryObjects[0].name );
 showSymmetryObject( SO );
+
+console.log( GE.Library.map.keys() );

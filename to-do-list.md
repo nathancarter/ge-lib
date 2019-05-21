@@ -1,9 +1,15 @@
 
 # To-do list
 
+ * Fix the fact that you have to pass a full path to a group.
+   Instead:
+    * Write a function that returns all names you *could* load.
+    * Improve the `loadAllFromFilesystem` function to accept just
+      the group file basename.
+    * Update existing documentation and test files to do this.
+
 ## Cycle graphs
 
- * Transfer the knowledge in `showCycleGraph` into an `.md` file.
  * Write a `CycleGraphSVG` class that accepts a `CycleGraph` in its
    constructor, much like `DisplayCycleGraph` does, and that can
    render to a string or to a file.
