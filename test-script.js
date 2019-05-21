@@ -20,7 +20,7 @@
 const GE = require( './ge-lib.js' );
 
 //// How to load all groups (takes 2-3 seconds)
-GE.Library.loadAllFromFilesystem();
+// GE.Library.loadAllFromFilesystem();
 
 //// How to load individual groups (these are just examples):
 // GE.Library.loadFromFilesystem( './groups/Z_10.group' );
@@ -110,15 +110,35 @@ const showMultTable = mt => {
 // showMultTable( MT );
 
 //// Utility function for displaying a Cayley graph:
-const showCayleyDiagram = cd => {
+const showCayleyDiagram = ( cd, precision = 3 ) => {
+    const f = n => Number( n ).toFixed( precision );
     console.log( `Cayley diagram for "${cd.group.shortName}":` );
-    console.log( 'nodes', cd.nodes );
-    console.log( 'node_labels', cd.node_labels );
-    console.log( 'arrows', cd.lines );
+    cd.nodes.map( node => {
+        const color = new THREE.Color( node.color );
+        console.log( `\t${node.element} @ `
+                   + `(${f(node.point.x)},${f(node.point.y)},${f(node.point.z)}), `
+                   + `rgb: (${f(color.r)},${f(color.g)},${f(color.b)}), ${node.label}` );
+        // node.radius is typically undefined, so not dumping that out here
+        if ( node.colorHighlight )
+            console.log( `\t\tColor highlight: ${node.colorHighlight}` );
+        if ( node.ringHighlight )
+            console.log( `\t\tRing highlight: ${node.ringHighlight}` );
+        if ( node.squareHighlight )
+            console.log( `\t\tSquare highlight: ${node.squareHighlight}` );
+    } );
+    cd.lines.map( line => {
+        const arrow = line.arrowhead ? '->' : '--';
+        const cgroup = line.vertices[0].curvedGroup.map( v => v.element ).sort().join( ',' );
+        const style = line.style ? `curve in ${cgroup}`
+                                 : 'line';
+        console.log( `\t${line.arrow}-arrow: `
+                   + `${line.vertices[0].element}${arrow}${line.vertices[1].element} `
+                   + `${line.color} ${style}` );
+        // not reporting line.offset here, but it's the user-edited curvature
+    } );
 };
 
 //// How to create the multiplication table for a group:
+GE.Library.loadFromFilesystem( './groups/S_3.group' );
 const CD = new GE.CayleyDiagram( GE.Library.map.get( 'S_3' ) );
-// You could also do new GE.CayleyDiagram( group, diagramName );
-// Here you could do CD.setStrategies( [ [ ... ], ... ] );
 showCayleyDiagram( CD );

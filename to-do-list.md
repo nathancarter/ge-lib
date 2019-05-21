@@ -3,43 +3,6 @@
 
 ## Next steps
 
- * Finish Cayley diagram dumping routine in `test-script.js`;
-   you may wish to make use of the following information from the
-   JSON serialization routines.  (Whichever of these things you
-   skip in the dumping routine, just copy down to the Cayley diagram
-   section later so it doesn't get lost or never documented.)
-```js
-{
-    groupURL : cayleyDiagram.group.URL,
-    _diagram_name : cayleyDiagram.diagram_name,
-    highlights : cayleyDiagram.highlights,
-    elements : cayleyDiagram.elements,
-    zoomLevel : cayleyDiagram.zoomLevel,
-    lineWidth : cayleyDiagram.lineWidth,
-    nodeScale : cayleyDiagram.nodeScale,
-    fogLevel : cayleyDiagram.fogLevel,
-    labelSize : cayleyDiagram.labelSize,
-    arrowheadPlacement : cayleyDiagram.arrowheadPlacement,
-    arrowColors : cayleyDiagram.arrowColors,
-    _camera : this.camera.matrix.toArray(),
-    highlights : {
-        background : cayleyDiagram.nodes.map( n => n.colorHighlight ),
-        ring : cayleyDiagram.nodes.map( n => n.ringHighlight ),
-        square : cayleyDiagram.nodes.map( n => n.squareHighlight )
-    },
-    strategies : cayleyDiagram.getStrategies(),
-    arrows : cayleyDiagram.lines.map( x => x.arrow )
-        .filter( ( v, i, s ) => s.indexOf( v ) === i ), // incl. each only 1x
-    nodePositions : cayleyDiagram.nodes.map( node => {
-        return { x : node.point.x, y : node.point.y, z : node.point.z };
-    } ),
-    nodeRadii : cayleyDiagram.nodes.map( node => node.radius ),
-    chunkIndex : cayleyDiagram.chunk,
-    arrowsData : cayleyDiagram.lines.map( ( arrow, index ) => {
-        return { style : arrow.style, offset : arrow.offset };
-    } )
-}
-```
  * Add symmetry object dumping routine in `test-script.js`
 
 ## Cycle graphs
@@ -81,7 +44,9 @@
    render to a string or to a file.
  * To complete the API for everything you can do in GE with CDs:
     * Add to the `.md` doc how to create a named CD (and to get the
-      list of named CDs for a group).
+      list of named CDs for a group).  Create by passing the name to
+      the `CayleyDiagram` constructor.  Get the list of names by
+      `group.cayleyDiagrams.map( d => d.name )`.
     * Add to the `.md` doc how to specify the strategies for
       generating a CD (setStrategies() on an array of rows of the
       generating table, each row is a length-4 array containing the
@@ -100,6 +65,19 @@ cayleyDiagram.setLineColors();
     * Add to the `.md` doc how to specify whether to chunk: by
       default, `cd.chunk` is undefined; you can set it to an index
       into the strategy table.
+ * Add features to the `CayleyDiagramSVG` class that support the
+   following features that we support in 3D diagrams in GE.  Try
+   to do so in a way that is re-usabale for symmetry objects later.
+```js
+cayleyDiagram.zoomLevel
+cayleyDiagram.lineWidth
+cayleyDiagram.nodeScale
+cayleyDiagram.fogLevel
+cayleyDiagram.labelSize
+cayleyDiagram.arrowheadPlacement
+cayleyDiagram.arrowColors
+displayDiagram.camera.matrix.toArray()
+```
 
 ## Symmetry objects
 
