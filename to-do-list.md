@@ -1,10 +1,6 @@
 
 # To-do list
 
-## Next steps
-
- * Add symmetry object dumping routine in `test-script.js`
-
 ## Cycle graphs
 
  * Transfer the knowledge in `showCycleGraph` into an `.md` file.
