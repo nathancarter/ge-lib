@@ -3,9 +3,6 @@
 
 ## Cycle graphs
 
- * Write a `CycleGraphSVG` class that accepts a `CycleGraph` in its
-   constructor, much like `DisplayCycleGraph` does, and that can
-   render to a string or to a file.
  * Rename `GroupSVGRenderer.renderToFile()` to `renderSVGFile()`.
  * Add `GroupSVGRenderer.renderPDFFile()` that writes a temp SVG
    file, runs `rsvg-convert` on it, then discards the temp file.
