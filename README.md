@@ -3,18 +3,19 @@
 
 ## Purpose
 
-This project exposes most of the core functionality of
-[Group Explorer 3](https://github.com/nathancarter/group-explorer)
-as a node.js module.
+This project exposes most of the core functionality of [Group Explorer
+3](https://github.com/nathancarter/group-explorer) as a node.js module, and
+extends its rendering capabilities to vector graphics formats (SVG, PDF) as
+well as PNG.
 
 ## Status
 
-This is in early stages of development, and is far from complete.
-See the [to-do list](to-do-list.md).
+This is in early stages of development, and is far from complete. See the
+[to-do list](to-do-list.md).
 
-Eventually, it should be possible to use these tools to
-programmatically load groups and create visualizations into
-formats like SVG, PNG, PDF, Asymptote, TikZ, etc.
+Eventually, it should be possible to use these tools to programmatically
+load groups and create visualizations into formats like SVG, PNG, PDF,
+Asymptote, TikZ, etc.
 
 For now, we're just getting started.  Check back later!
 
