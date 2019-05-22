@@ -26,6 +26,12 @@ class MulttableRenderer extends GroupRenderer {
         const scale = this.minimumCellSize();
         this.set( 'width', this.viz.size * scale );
         this.set( 'height', this.viz.size * scale );
+    // Convenience function for looking up whether an element is
+    // highlighted in a particular way.
+    getHighlight ( type, elt ) {
+        if ( type == 'background' ) return this.viz.colors[elt];
+        const key = `${type}s`;
+        return this.viz[key] === undefined ? undefined : this.viz[key][elt];
     }
     // The main drawing routine for multiplication tables.
     draw () {

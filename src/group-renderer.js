@@ -177,13 +177,6 @@ class GroupRenderer {
     chooseGoodSize () { }
     // Default draw method is just a stub.  Subclasses write this.
     draw () { }
-    // Convenience function for looking up whether an element is
-    // highlighted in a particular way.
-    getHighlight ( type, elt ) {
-        return this.viz.hasOwnProperty( 'highlights' )
-            && this.viz.highlights.hasOwnProperty( type ) ?
-               this.viz.highlights[type][elt] : undefined;
-    }
 }
 
 module.exports.GroupRenderer = GroupRenderer;

@@ -86,6 +86,13 @@ class CycleGraphRenderer extends GroupRenderer {
         this.setMarginsFromRadius();
         this.resizeBy( this.minimumScaleFactor() );
     }
+    // Convenience function for looking up whether an element is
+    // highlighted in a particular way.
+    getHighlight ( type, elt ) {
+        return this.viz.hasOwnProperty( 'highlights' )
+            && this.viz.highlights.hasOwnProperty( type ) ?
+               this.viz.highlights[type][elt] : undefined;
+    }
     // The main drawing routine for cycle graphs.
     draw () {
         const lineWidth = this.get( 'lineWidth' )
