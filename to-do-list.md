@@ -1,16 +1,21 @@
 
 # To-do list
 
+## Miscellany
+
+ * Correct MathJax's treatment of multi-letter `<mi>`s as if they
+   were not to be italicized; break them up.
+
 ## Cycle graphs
 
  * Write a `CycleGraphSVG` class that accepts a `CycleGraph` in its
    constructor, much like `DisplayCycleGraph` does, and that can
    render to a string or to a file.
- * Write a utility for converting an SVG on disk to a PDF or PNG
-   by calling the `rsvg-convert` command-line utility.
- * Write a utility for converting an SVG string to a PDF or PNG
-   by exporting to a temp file, delegating to the file conversion
-   function, and then loading the result.
+ * Rename `GroupSVGRenderer.renderToFile()` to `renderSVGFile()`.
+ * Add `GroupSVGRenderer.renderPDFFile()` that writes a temp SVG
+   file, runs `rsvg-convert` on it, then discards the temp file.
+ * Add `GroupSVGRenderer.renderPNGFile()` that writes a temp PDF
+   file, runs `convert` on it, then discards the temp file.
 
 ## Multiplication tables
 
