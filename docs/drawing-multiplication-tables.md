@@ -34,15 +34,11 @@ mt.highlightByCorner( partition ); // or [ subset ]
 
 ## Making an SVG, PDF, or PNG
 
-This is still in development; check back later.
-
-<!--
-
 To draw a multiplication table as an SVG, PDF, or PNG, create an instance of
 the `MulttableRenderer` class, passing your `Multtable` to the constructor.
 
 ```js
-const toBeDrawn = new GE.MulttableRenderer( cg );
+const toBeDrawn = new GE.MulttableRenderer( mt );
 ```
 
 To dump the result to a file, use any one of the following calls.
@@ -64,13 +60,7 @@ simultaneously on the same object (`toBeDrawn`) and thus will be
 simultaneously manipulating its internal state, which can result in
 incorrect results.
 
--->
-
 ## A complete example
-
-This is still in development; check back later.
-
-<!--
 
 We provide a minimal script that can create an SVG, PDF, or PNG file for the
 multiplication table of a group, together with the resulting images.
@@ -79,8 +69,6 @@ multiplication table of a group, together with the resulting images.
  * [Result: `examples/multiplication-table.svg`](../examples/multiplication-table.svg)
  * [Result: `examples/multiplication-table.pdf`](../examples/multiplication-table.pdf)
  * [Result: `examples/multiplication-table.png`](../examples/multiplication-table.png)
-
--->
 
 ## Properties of multiplication table objects
 

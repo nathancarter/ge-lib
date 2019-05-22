@@ -3,10 +3,8 @@
 
 ## Multiplication tables
 
- * Transfer the knowledge in `showMultTable` into an `.md` file.
- * Write a `MultiplicationTableSVG` class that accepts a `Multtable`
-   in its constructor, much like `DisplayMulttable` does, and that
-   can render to a string or to a file.
+ * Complete the section of the Drawing Multiplication Tables
+   document that will list the properties of `Multtable` instances.
  * To complete the API for everything you can do in GE with MTs:
     * Add to the `.md` doc the
       `multtable.organizeBySubgroup(index)` function.
@@ -14,11 +12,6 @@
       `multtable.colors`: `Multtable.COLORATION_RAINBOW`,
       `Multtable.COLORATION_GRAYSCALE`, and
       `Multtable.COLORATION_NONE`.
-    * Add to the `.md` doc these functions, each of which accepts
-      a partition of the group elements:
-      `multtable.highlightByBackground()`,
-      `multtable.highlightByBorder()`, and
-      `multtable.highlightByCorner()`
 
 ## Cayley diagrams
 
@@ -88,12 +81,6 @@ Don't forget to document the `GE.IsomorphicGroups` features as well.
    DOM hierarchies.)
 
 ## Random notes
-
- * To convert an SVG to a PDF:
-```sh
-# Assuming you've installed librsvg using apt-get/brew/etc.:
-rsvg-convert -f pdf -o myfile.pdf myfile.svg
-```
 
  * Note that I tried installing the following node package, but
    it has build errors that many people are experiencing, so it
