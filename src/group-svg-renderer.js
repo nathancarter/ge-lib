@@ -22,8 +22,25 @@ class GroupSVGRenderer {
     }
     // Use these functions to set or get options that subclasses
     // may respect while drawing the SVG.
-    set ( key, value ) { this.options[key] = value; }
-    get ( key ) { return this.options[key]; }
+    set ( key, value ) {
+        if ( key instanceof Object )
+            return Object.assign( this.options, key );
+        this.options[key] = value;
+    }
+    get ( key ) {
+        if ( key == 'margins' ) return {
+            left : this.options.marginLeft,
+            top : this.options.marginTop,
+            right : this.options.marginRight,
+            bottom : this.options.marginBottom
+        }
+        return this.options[key];
+    }
+    // Resize canvas absolutely or relatively:
+    resizeTo ( w, h ) { this.set( { width : w, height : h } ); }
+    resizeBy ( f ) {
+        this.resizeTo( this.get( 'width' ) * f, this.get( 'height' ) * f );
+    }
     // Once the thing is rendered, you can ask for it in SVG
     // format.
     svg () { return this.canvas.svg(); }
@@ -64,17 +81,25 @@ class GroupSVGRenderer {
     }
     // Write the representation of an element centered on a given
     // point on the canvas.
+    // Because font size can be screwed up in conversion to PDF,
+    // you may wish to set( 'fontScale', 0.75 ) or so before this,
+    // if your resulting SVG is going to be converted to PDF.
+    // (It won't look right as an SVG, but will look right after
+    // conversion to PDF.)
     writeElement ( a, x, y ) {
+        const scale = this.get( 'fontScale' ) || 1.0;
         const size = this.representationSize( a );
         const name = this.representation( a );
         return this.canvas.insertSVG( name )
-                          .move( x - size.w / 2, y - size.h / 2 );
+                          .move( x - size.w / 2 * scale,
+                                 y - size.h / 2 * scale );
     }
     // Render group to SVG asynchronously, calling the internal
     // draw() method to fill the canvas with the group's
     // representation.  Subclasses should just implement draw().
     render ( callback ) {
         this.computeRepresentations( () => {
+            this.canvas.size( this.get( 'width' ), this.get( 'height' ) );
             this.canvas.clear();
             this.draw();
             if ( callback ) callback( this.svg() );
@@ -82,6 +107,13 @@ class GroupSVGRenderer {
     }
     // Default draw method is just a stub.  Subclasses write this.
     draw () { }
+    // Convenience function for looking up whether an element is
+    // highlighted in a particular way.
+    getHighlight ( type, elt ) {
+        return this.viz.hasOwnProperty( 'highlights' )
+            && this.viz.highlights.hasOwnProperty( type ) ?
+               this.viz.highlights[type][elt] : undefined;
+    }
 }
 
 module.exports.GroupSVGRenderer = GroupSVGRenderer;
