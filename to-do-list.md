@@ -6,11 +6,6 @@
  * Now that `CycleGraphSVG` and `GroupSVGRenderer` handle multiple
    file formats, change their names to not include "SVG."
 
-## Cycle graphs
-
- * Add `GroupSVGRenderer.renderPNGFile()` that writes a temp PDF
-   file, runs `convert` on it, then discards the temp file.
-
 ## Multiplication tables
 
  * Transfer the knowledge in `showMultTable` into an `.md` file.

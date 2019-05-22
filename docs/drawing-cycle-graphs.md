@@ -61,34 +61,27 @@ To dump the result to a file, use any one of the following calls.
 ```js
 CGSVG.renderSVGFile( 'cycle-graph.svg' );
 CGSVG.renderPDFFile( 'cycle-graph.pdf' );
+CGSVG.renderPNGFile( 'cycle-graph.png' );
 ```
 
-Both are asynchronous and take an optional callback as second argument.
+All are asynchronous and take an optional callback as second argument.
 The reason for this is that they begin by doing a bunch of asynchronous
 renderings of element names from MathML to SVGs before using the
 results to compute best sizes for the resulting renderings.
 
-*Consequently it is important to NOT run both of those commands in
-immediate succession.*  Since they are asynchronous, they will try to
-run both simultaneously on the same object (`CGSVG`) and thus will both
-be manipulating its internal state at the same time, which is not what
-you want.
+*Consequently it is important to NOT run more than one of those commands in
+immediate succession.*  Since they are asynchronous, they will try to run
+simultaneously on the same object (`CGSVG`) and thus will be simultaneously
+manipulating its internal state, which can result in incorrect results.
 
 ## A complete example
 
-We provide a minimal script that can create an SVG or PDF file for the cycle
-graph of a group, together with the resulting images.
+We provide a minimal script that can create an SVG, PDF, or PNG file for the
+cycle graph of a group, together with the resulting images.
 
  * [Script: `examples/cycle-graph.js`](../examples/cycle-graph.js)
  * [Result: `examples/cycle-graph.svg`](../examples/cycle-graph.svg)
  * [Result: `examples/cycle-graph.pdf`](../examples/cycle-graph.pdf)
-
-## Making a PNG
-
-Once you have a PDF, you can convert it very faithfully to a PNG
-with the command-line utility `convert`, part of ImageMagick.  See
-[the script for that purpose](./topng.sh) in this repository.
-
  * [Result: `examples/cycle-graph.png`](../examples/cycle-graph.png)
 
 ## Properties of cycle graph objects

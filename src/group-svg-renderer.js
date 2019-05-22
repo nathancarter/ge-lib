@@ -111,6 +111,8 @@ class GroupSVGRenderer {
     }
     // Same as previous, but save to a file, then call callback.
     // Callback is still passed the SVG code that was saved to the file.
+    // Be sure that the filename you pass ends with .svg or your
+    // operating system may be confused about its contents!
     renderSVGFile ( filename, callback ) {
         this.setupSizeForSVG( () => {
             this.render( svg => {
@@ -122,8 +124,10 @@ class GroupSVGRenderer {
         } );
     }
     // Same as previous, but save to a temp SVG file, then call a shell
-    // script to convert to the desired PDF file, then delete the temp
-    // file, then call the callback with the SVG code.
+    // script to convert to the desired PDF file, then call the callback
+    // with the SVG code.
+    // Be sure that the filename you pass ends with .pdf or your
+    // operating system may be confused about its contents!
     renderPDFFile ( filename, callback ) {
         this.setupSizeForPDF( () => {
             this.render( svg => {
@@ -140,9 +144,28 @@ class GroupSVGRenderer {
             } );
         } );
     }
+    // Same as previous, but save to a temp PDF file, then call a shell
+    // script to convert to the desired PNG file, then callback with the
+    // SVG code.
+    // Be sure that the filename you pass ends with .png or your
+    // operating system may be confused about its contents!
+    renderPNGFile ( filename, callback ) {
+        const tmpfile = tempfile( '.pdf' );
+        this.renderPDFFile( tmpfile, svg => {
+            const cmd = `convert ${tmpfile} ${filename}`;
+            exec( cmd, ( err, stdout, stderr ) => {
+                if ( err ) throw err;
+                if ( callback ) callback ( svg );
+            } );
+        } );
+    }
     // If subclasses have different preferred sizing constants for
     // different file output formats, they can implement those here.
-    // Stubs do nothing.
+    // Stubs do nothing.  There is no need for a separate function
+    // for PNGs, because they are converted faithfully from PDFs.
+    // But since the conversion from SVG to PDF doesn't seem to
+    // preserve font sizes perfectly, we need two functions, so that
+    // subclasses can adjust to work around that.
     setupSizeForSVG ( callback ) { if ( callback ) callback(); }
     setupSizeForPDF ( callback ) { if ( callback ) callback(); }
     // Default draw method is just a stub.  Subclasses write this.
