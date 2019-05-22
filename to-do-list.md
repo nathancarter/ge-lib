@@ -78,4 +78,5 @@ Don't forget to document the `GE.IsomorphicGroups` features as well.
    available.  I couldn't find an equivalent tool on npm,
    though some things are close to what's needed.  (The best
    one seems to process strings instead of XML trees and/or
-   DOM hierarchies.)
+   DOM hierarchies.)  Thankfully so far I haven't needed this,
+   because `mathjax-node` has been doing everthing I need.
