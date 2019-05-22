@@ -8,9 +8,6 @@
 const mj = require( 'mathjax-node' );
 mj.start();
 
-// We will also want to process groups nicely, so:
-const BasicGroup = require( './ge-lib' ).BasicGroup;
-
 // Here is where we will cache all data this module oversees.
 const cache = { };
 
@@ -39,8 +36,6 @@ const add = module.exports.add = ( mathml, callback ) => {
                     callback( mathml.map( entry => cache[entry] ) );
             } );
         } );
-    } else if ( mathml instanceof BasicGroup ) {
-        add( mathml.representation, callback );
     }
 }
 
