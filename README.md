@@ -9,8 +9,8 @@ as a node.js module.
 
 ## Status
 
-This is in very early stages of development, and you shouldn't
-expect anything very useful yet.
+This is in early stages of development, and is far from complete.
+See the [to-do list](to-do-list.md).
 
 Eventually, it should be possible to use these tools to
 programmatically load groups and create visualizations into
@@ -20,8 +20,9 @@ For now, we're just getting started.  Check back later!
 
 ## Documentation
 
-So far we have very little.  We will accumulate it here.
+So far we are only about one-third done.  We will accumulate more here.
  * [Basic API for this module](docs/basic-api.md)
+ * [Drawing multiplication tables](docs/drawing-multiplication-tables.md)
  * [Drawing cycle graphs](docs/drawing-cycle-graphs.md)
 
 ## License
