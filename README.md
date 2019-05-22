@@ -1,5 +1,5 @@
 
-# Group Explorer Library
+# Group Explorer Module
 
 ## Purpose
 
