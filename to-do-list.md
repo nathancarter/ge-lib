@@ -79,10 +79,3 @@ Don't forget to document the `GE.IsomorphicGroups` features as well.
    though some things are close to what's needed.  (The best
    one seems to process strings instead of XML trees and/or
    DOM hierarchies.)
-
-## Random notes
-
- * Note that I tried installing the following node package, but
-   it has build errors that many people are experiencing, so it
-   doesn't seem ready yet for prime time.
-   https://www.npmjs.com/package/rsvg

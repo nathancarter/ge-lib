@@ -124,6 +124,14 @@ class GroupRenderer {
     // with the SVG code.
     // Be sure that the filename you pass ends with .pdf or your
     // operating system may be confused about its contents!
+    //
+    // You may ask:
+    // Why use a command-line script when there is a node module for
+    // rsvg?  Because I tried installing it, but got build errors, and
+    // the GitHub issue tracker says many other people are in the same
+    // boat.  So that package doesn't seem mature enough to use yet.
+    // For reference later, if/when it gets more usable, it is here:
+    // https://www.npmjs.com/package/rsvg
     renderPDFFile ( filename, callback ) {
         this.setupSizeForPDF( () => {
             this.renderSVGString( svg => {
