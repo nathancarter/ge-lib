@@ -1,11 +1,9 @@
 
 # Drawing Cycle Graphs
 
-This file will document how to use `ge-lib.js` to draw cycle graphs.
-This is a first draft, so expect rough edges.
+This file documents how to use `ge-lib.js` to draw cycle graphs.
 
-This file expects that you have read the
-[Basic API](basic-api.md) document.
+This file expects that you have read the [Basic API](basic-api.md) document.
 
 ## Construction
 
@@ -18,12 +16,12 @@ const cg = new GE.CycleGraph( GE.Library.loadByName( 'Z_5' ) );
 
 ## Optional highlighting
 
-The content of this section is not necessary to visualize your
-cycle graph; you can jump to the next section immediately if your
-cycle graph doesn't require highlighting any elements.
+The content of this section is not necessary to visualize your cycle graph;
+you can jump to the next section immediately if your cycle graph doesn't
+require highlighting any elements.
 
-You can highlight a partition of the elements using any of the
-following methods:
+You can highlight a partition of the elements using any of the following
+methods:
 
 ```js
 var partition;
@@ -36,8 +34,8 @@ cg.highlightByBorder( partition );
 // you can also highlightByTop()
 ```
 
-To highlight just a subset instead of a partition, treat that subset
-as if it were a one-part (usually non-exhaustive) "partition," like so:
+To highlight just a subset instead of a partition, treat that subset as if
+it were a one-part (usually non-exhaustive) "partition," like so:
 
 ```js
 const subset = cg.group.subgroups[1];
@@ -47,32 +45,33 @@ cg.highlightByBackground( [ subset ] );
 This puts all elements outside the subset into another part of the
 partition, which receives no highlighting.
 
-## Making an SVG
+## Making an SVG, PDF, or PNG
 
-To draw a cycle graph as an SVG, create an instance of the
-`CycleGraphSVG` class, passing your `CycleGraph` to the constructor.
+To draw a cycle graph as an SVG, PDF, or PNG, create an instance of the
+`CycleGraphRenderer` class, passing your `CycleGraph` to the constructor.
 
 ```js
-const toBeDrawn = new GE.CycleGraphSVG( cg );
+const toBeDrawn = new GE.CycleGraphRenderer( cg );
 ```
 
 To dump the result to a file, use any one of the following calls.
 
 ```js
-CGSVG.renderSVGFile( 'cycle-graph.svg' );
-CGSVG.renderPDFFile( 'cycle-graph.pdf' );
-CGSVG.renderPNGFile( 'cycle-graph.png' );
+toBeDrawn.renderSVGFile( 'cycle-graph.svg' );
+toBeDrawn.renderPDFFile( 'cycle-graph.pdf' );
+toBeDrawn.renderPNGFile( 'cycle-graph.png' );
 ```
 
-All are asynchronous and take an optional callback as second argument.
-The reason for this is that they begin by doing a bunch of asynchronous
-renderings of element names from MathML to SVGs before using the
-results to compute best sizes for the resulting renderings.
+All are asynchronous and take an optional callback as second argument. The
+reason for this is that they begin by doing a bunch of asynchronous
+renderings of element names from MathML to SVGs before using the results to
+compute best sizes for the resulting renderings.
 
 *Consequently it is important to NOT run more than one of those commands in
 immediate succession.*  Since they are asynchronous, they will try to run
-simultaneously on the same object (`CGSVG`) and thus will be simultaneously
-manipulating its internal state, which can result in incorrect results.
+simultaneously on the same object (`toBeDrawn`) and thus will be
+simultaneously manipulating its internal state, which can result in
+incorrect results.
 
 ## A complete example
 
@@ -86,8 +85,8 @@ cycle graph of a group, together with the resulting images.
 
 ## Properties of cycle graph objects
 
-You can access the following properties of the `CycleGraph` object
-(not the `CycleGraphSVG` object).
+You can access the following properties of the `CycleGraph` object (not the
+`CycleGraphRenderer` object).
 
  * Its bounding box
     * `cg.bbox.left`
@@ -125,7 +124,8 @@ You can access the following properties of the `CycleGraph` object
 ## Old example
 
 The following example was provided before there was a way to actually draw
-cycle graphs with `CycleGraphSVG`.  It is kept here merely for reference.
+cycle graphs with `CycleGraphRenderer`.  It is kept here merely for
+reference.
 
 ```js
 const dumpCycleGraph = ( cg, precision = 3 ) => {
