@@ -105,6 +105,15 @@ class GroupSVGRenderer {
             if ( callback ) callback( this.svg() );
         } );
     }
+    // Same as previous, but save to a file, then call callback.
+    // Callback is still passed the SVG code that was saved to the file.
+    renderToFile ( filename, callback ) {
+        this.render( svg =>
+            require( 'fs' ).writeFile( filename, svg, err => {
+                if ( err ) throw err;
+                if ( callback ) callback ( svg );
+            } ) );
+    }
     // Default draw method is just a stub.  Subclasses write this.
     draw () { }
     // Convenience function for looking up whether an element is

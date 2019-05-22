@@ -77,6 +77,17 @@ class CycleGraphSVG extends GroupSVGRenderer {
                         * ( h - m.top - m.bottom ) + m.top + m.bottom ) / h;
         return Math.max( xfactor, yfactor );
     }
+    // Combine the above functions into conveniences for the client.
+    setupSizeForSVG () {
+        this.set( 'radius', this.minimumRadius() * 0.8 );
+        this.setMarginsFromRadius();
+        this.resizeBy( this.minimumScaleFactor() );
+        this.set( 'fontScale', 1 );
+    }
+    setupSizeForPDF () {
+        this.setupSizeForSVG();
+        this.set( 'fontScale', 0.75 );
+    }
     // The main drawing routine for cycle graphs.
     draw () {
         const lineWidth = this.get( 'lineWidth' )
