@@ -14,11 +14,16 @@ const cache = { };
 // Here is the function you should call to add MathML to this module.
 const add = module.exports.add = ( mathml, callback ) => {
     if ( typeof mathml == 'string' ) {
-        if ( cache.hasOwnProperty( mathml ) )
-            if ( callback ) callback( cache[mathml] );
         const orig = mathml;
+        if ( cache.hasOwnProperty( orig ) )
+            if ( callback ) callback( cache[orig] );
         if ( !/^<math>/.test( mathml ) )
             mathml = `<math>${mathml}</math>`;
+        if ( cache.hasOwnProperty( mathml ) )
+            if ( callback ) callback( cache[mathml] );
+        mathml = splitMathIdentifiers( mathml );
+        if ( cache.hasOwnProperty( mathml ) )
+            if ( callback ) callback( cache[mathml] );
         mj.typeset( {
             math : mathml,
             format : 'MathML',
@@ -47,3 +52,20 @@ const add = module.exports.add = ( mathml, callback ) => {
 // - style (CSS style string that culd be used on an inline SVG)
 // - speakText (string, for accessibility technologies (?))
 module.exports.get = mathml => cache[mathml];
+
+// This internal function corrects multi-letter <mi>'s by splitting
+// them into multiple single-letter <mi>'s, so that they don't get
+// rendered by MathJax as non-italic text.
+splitMathIdentifiers = ( mathml ) => {
+    const re = /<mi>(\w{2,})<\/mi>/i;
+    var next;
+    while ( next = re.exec( mathml ) ) {
+        mathml = mathml.substring( 0, next.index )
+               + '<mrow>'
+               + next[1].split( '' ).map( char => `<mi>${char}</mi>` )
+                                    .join( '' )
+               + '</mrow>'
+               + mathml.substring( next.index + next[0].length );
+    }
+    return mathml;
+}

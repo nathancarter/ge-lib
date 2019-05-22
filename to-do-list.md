@@ -1,11 +1,6 @@
 
 # To-do list
 
-## Miscellany
-
- * Correct MathJax's treatment of multi-letter `<mi>`s as if they
-   were not to be italicized; break them up.
-
 ## Cycle graphs
 
  * Write a `CycleGraphSVG` class that accepts a `CycleGraph` in its
