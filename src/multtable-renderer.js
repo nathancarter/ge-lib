@@ -23,9 +23,10 @@ class MulttableRenderer extends GroupRenderer {
     }
     // Choose a sensible minimum size based on the current font scale.
     chooseGoodSize () {
-        const scale = this.minimumCellSize();
-        this.set( 'width', this.viz.size * scale );
-        this.set( 'height', this.viz.size * scale );
+        this.set( 'cellSize', this.minimumCellSize() );
+        this.set( 'width', this.viz.size * this.get( 'cellSize' ) );
+        this.set( 'height', this.viz.size * this.get( 'cellSize' ) );
+    }
     // Convenience function for looking up whether an element is
     // highlighted in a particular way.
     getHighlight ( type, elt ) {
@@ -35,15 +36,45 @@ class MulttableRenderer extends GroupRenderer {
     }
     // The main drawing routine for multiplication tables.
     draw () {
-        const w = this.get( 'width' );
-        const h = w;
-        // stub...come back later
-        this.canvas.line( 0, 0, w, h )
-                   .fill( 'none' )
-                   .stroke( { color : 'blue', width : 5 } );
-        this.canvas.line( 0, h, w, 0 )
-                   .fill( 'none' )
-                   .stroke( { color : 'blue', width : 5 } );
+        const size = this.get( 'cellSize' );
+        const lw = this.get( 'lineWidth' ) || this.get( 'width' ) / 500;
+        // loop through table rows
+        this.viz.elements.map( ( rowelt, rowidx ) => {
+            const rowpos = this.elementPosition( rowelt );
+            // loop through table columns
+            this.viz.elements.map( ( colelt, colidx ) => {
+                const colpos = this.elementPosition( colelt );
+                // compute element in that cell
+                const prod = this.viz.group.mult( rowelt, colelt );
+                // draw cell background
+                const bgColor = this.getHighlight( 'background', prod );
+                this.canvas.rect( size, size )
+                           .fill( bgColor || 'white' )
+                           .stroke( { width : lw, color : 'black' } )
+                           .move( colpos, rowpos );
+                // if needed, draw border highlight
+                const borderColor = this.getHighlight( 'border', prod );
+                if ( borderColor ) {
+                    const borderWidth = lw * 2;
+                    this.canvas.rect( size - borderWidth - lw, size - borderWidth - lw )
+                               .fill( 'none' )
+                               .stroke( { color : borderColor, width : borderWidth } )
+                               .move( colpos + borderWidth / 2 + lw / 2,
+                                      rowpos + borderWidth / 2 + lw / 2 );
+                }
+                // if needed, draw corner highlight
+                const corColor = this.getHighlight( 'corner', prod );
+                if ( corColor ) {
+                    const cw = size / 3;
+                    this.canvas.path( `M0 0 ${cw} 0 0 ${cw} Z` )
+                               .fill( corColor )
+                               .stroke( { width : lw, color : 'black' } )
+                               .move( colpos, rowpos );
+                }
+                // write name
+                this.writeElement( prod, colpos + size / 2, rowpos + size / 2 );
+            } );
+        } );
     }
 }
 

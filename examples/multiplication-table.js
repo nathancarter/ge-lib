@@ -12,7 +12,7 @@ const MT = new GE.Multtable( group );
 const renderer = new GE.MulttableRenderer( MT );
 
 // Highlight some stuff, as an example
-MT.highlightByBackground( group.conjugacyClasses.map( c => c.toArray() ) );
+MT.highlightByBorder( group.conjugacyClasses.map( c => c.toArray() ) );
 MT.highlightByCorner( group.orderClasses.map( c => c.toArray() ) );
 
 // To render an SVG/PDF/PNG, uncomment one of the lines below:
