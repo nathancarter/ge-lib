@@ -1,11 +1,6 @@
 
 # To-do list
 
-## Miscellaneous
-
- * Now that `CycleGraphSVG` and `GroupSVGRenderer` handle multiple
-   file formats, change their names to not include "SVG."
-
 ## Multiplication tables
 
  * Transfer the knowledge in `showMultTable` into an `.md` file.

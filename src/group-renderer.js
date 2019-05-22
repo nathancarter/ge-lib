@@ -1,9 +1,10 @@
 
 // This module provides a base class for all those classes that
-// will render a group to an SVG, in any way (Multiplication
+// will render a group to an SVG/PDF/PNG, in any way (Multiplication
 // Table, Cayley Diagram, Cycle Graph, or Symmetry Object).
 // It handles such things as converting element names to SVG
-// format, creating SVG canvases, etc.
+// format, creating SVG canvases, converting SVGs to PDFs or PNGs,
+// etc.
 
 // We want to be able to create and manipulate SVGs in node.js:
 const SVG = require( './svg-utils' );
@@ -15,7 +16,7 @@ const tempfile = require( 'tempfile' )
 const { exec } = require( 'child_process' );
 
 // The main class of this module:
-class GroupSVGRenderer {
+class GroupRenderer {
     // The visualizer will be something like a CayleyDiagram,
     // CycleGraph, Multtable, or SymmetryObject instance.
     constructor ( visualizer ) {
@@ -25,7 +26,7 @@ class GroupSVGRenderer {
         this.options = { };
     }
     // Use these functions to set or get options that subclasses
-    // may respect while drawing the SVG.
+    // may respect while drawing.
     set ( key, value ) {
         if ( key instanceof Object )
             return Object.assign( this.options, key );
@@ -86,11 +87,6 @@ class GroupSVGRenderer {
     }
     // Write the representation of an element centered on a given
     // point on the canvas.
-    // Because font size can be screwed up in conversion to PDF,
-    // you may wish to set( 'fontScale', 0.75 ) or so before this,
-    // if your resulting SVG is going to be converted to PDF.
-    // (It won't look right as an SVG, but will look right after
-    // conversion to PDF.)
     writeElement ( a, x, y ) {
         const scale = this.get( 'fontScale' ) || 1.0;
         const size = this.representationSize( a );
@@ -98,10 +94,10 @@ class GroupSVGRenderer {
         return this.canvas.insertSVG( name )
                           .move( x - size.w / 2, y - size.h / 2 );
     }
-    // Render group to SVG asynchronously, calling the internal
-    // draw() method to fill the canvas with the group's
+    // Render group to an SVG string asynchronously, calling the
+    //  internal draw() method to fill the canvas with the group's
     // representation.  Subclasses should just implement draw().
-    render ( callback ) {
+    renderSVGString ( callback ) {
         this.computeRepresentations( () => {
             this.canvas.size( this.get( 'width' ), this.get( 'height' ) );
             this.canvas.clear();
@@ -115,7 +111,7 @@ class GroupSVGRenderer {
     // operating system may be confused about its contents!
     renderSVGFile ( filename, callback ) {
         this.setupSizeForSVG( () => {
-            this.render( svg => {
+            this.renderSVGString( svg => {
                 require( 'fs' ).writeFile( filename, svg, err => {
                     if ( err ) throw err;
                     if ( callback ) callback ( svg );
@@ -130,7 +126,7 @@ class GroupSVGRenderer {
     // operating system may be confused about its contents!
     renderPDFFile ( filename, callback ) {
         this.setupSizeForPDF( () => {
-            this.render( svg => {
+            this.renderSVGString( svg => {
                 const tmpfile = tempfile( '.svg' );
                 require( 'fs' ).writeFile( tmpfile, svg, err => {
                     if ( err ) throw err;
@@ -179,4 +175,4 @@ class GroupSVGRenderer {
     }
 }
 
-module.exports.GroupSVGRenderer = GroupSVGRenderer;
+module.exports.GroupRenderer = GroupRenderer;

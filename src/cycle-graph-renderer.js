@@ -1,9 +1,12 @@
 
-const { GroupSVGRenderer } = require( './group-svg-renderer' );
+const { GroupRenderer } = require( './group-renderer' );
 const geom = require( './geometry' );
 
-// Now the cycle graph SVG drawing class
-class CycleGraphSVG extends GroupSVGRenderer {
+// Now the cycle graph drawing class.
+// (Note that while this class can render many different formats,
+// it constructs an SVG internally, then produces all other
+// formats by conversion after the fact.)
+class CycleGraphRenderer extends GroupRenderer {
     // set up default values for options
     constructor ( visualizer ) {
         super( visualizer );
@@ -77,7 +80,9 @@ class CycleGraphSVG extends GroupSVGRenderer {
                         * ( h - m.top - m.bottom ) + m.top + m.bottom ) / h;
         return Math.max( xfactor, yfactor );
     }
-    // Combine the above functions into conveniences for the client.
+    // Combine the above functions to fill in the size-computing
+    // stubs the superclass uses when someone calls renderSVGFile(),
+    // renderPDFFile(), or renderPNGFile().
     setupSizeForSVG ( callback ) {
         this.computeRepresentations( () => {
             this.set( 'fontScale', 1 );
@@ -88,7 +93,7 @@ class CycleGraphSVG extends GroupSVGRenderer {
         } );
     }
     setupSizeForPDF ( callback ) {
-        this.setupSizeForSVG( () => {
+        this.computeRepresentations( () => {
             this.set( 'fontScale', 0.75 );
             this.set( 'radius', this.minimumRadius() );
             this.setMarginsFromRadius();
@@ -146,4 +151,4 @@ class CycleGraphSVG extends GroupSVGRenderer {
     }
 }
 
-module.exports.CycleGraphSVG = CycleGraphSVG;
+module.exports.CycleGraphRenderer = CycleGraphRenderer;
