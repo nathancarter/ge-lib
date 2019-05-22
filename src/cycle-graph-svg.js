@@ -111,6 +111,19 @@ class CycleGraphSVG extends GroupSVGRenderer {
                        .fill( bgColor || 'white' )
                        .stroke( 'none' )
                        .move( pos.x - r, pos.y - r );
+            // if needed, drop top highlight
+            const topColor = this.getHighlight( 'top', a );
+            if ( topColor ) {
+                const ang = Math.PI * 0.15;
+                const x1 = r * Math.cos( ang );
+                const y1 = -r * Math.sin( ang );
+                const x2 = r * Math.cos( Math.PI - ang );
+                const y2 = -r * Math.sin( Math.PI - ang );
+                this.canvas.path( `M${x1} ${y1} A${r} ${r} 0 0 0 ${x2} ${y2} Z` )
+                           .fill( topColor )
+                           .stroke( { width : 0.5, color : 'black' } )
+                           .move( pos.x - x1, pos.y - r );
+            }
             // draw outline
             const borderColor = this.getHighlight( 'border', a );
             this.canvas.circle( 2*r )
