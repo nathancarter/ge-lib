@@ -2,7 +2,7 @@
   "name": "ge-lib",
   "version": "0.1.0",
   "description": "A node.js module for accessing Group Explorer's core functionality",
-  "main": "ge-lib.js",
+  "main": "index.js",
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.12",
     "jquery": "^3.4.1",
