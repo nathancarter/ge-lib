@@ -74,9 +74,10 @@ class GroupSVGRenderer {
     // these magic constants.
     representationSize ( a ) {
         const data = this.representationData( a );
+        const scale = this.get( 'fontScale' ) || 1.0;
         return {
-            w : parseFloat( data.width ) * 8,
-            h : parseFloat( data.height ) * 8
+            w : parseFloat( data.width ) * 8 * scale,
+            h : parseFloat( data.height ) * 8 * scale
         };
     }
     // Write the representation of an element centered on a given
@@ -91,8 +92,7 @@ class GroupSVGRenderer {
         const size = this.representationSize( a );
         const name = this.representation( a );
         return this.canvas.insertSVG( name )
-                          .move( x - size.w / 2 * scale,
-                                 y - size.h / 2 * scale );
+                          .move( x - size.w / 2, y - size.h / 2 );
     }
     // Render group to SVG asynchronously, calling the internal
     // draw() method to fill the canvas with the group's

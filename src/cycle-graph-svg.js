@@ -42,7 +42,7 @@ class CycleGraphSVG extends GroupSVGRenderer {
         return this.viz.group.elements.map( a => {
             const dims = this.representationSize( a );
             return Math.max( dims.w, dims.h );
-        } ).reduce( ( a, b ) => Math.max( a, b ) ) * 0.65;
+        } ).reduce( ( a, b ) => Math.max( a, b ) ) * 0.55;
         // 0.6 because circle diameter = 1.2 * name size, for margin
     }
     // Expand the margins to be just bigger than the current radius.
@@ -80,16 +80,19 @@ class CycleGraphSVG extends GroupSVGRenderer {
     // Combine the above functions into conveniences for the client.
     setupSizeForSVG ( callback ) {
         this.computeRepresentations( () => {
-            this.set( 'radius', this.minimumRadius() * 0.8 );
+            this.set( 'fontScale', 1 );
+            this.set( 'radius', this.minimumRadius() );
             this.setMarginsFromRadius();
             this.resizeBy( this.minimumScaleFactor() );
-            this.set( 'fontScale', 1 );
             if ( callback ) callback();
         } );
     }
     setupSizeForPDF ( callback ) {
         this.setupSizeForSVG( () => {
             this.set( 'fontScale', 0.75 );
+            this.set( 'radius', this.minimumRadius() );
+            this.setMarginsFromRadius();
+            this.resizeBy( this.minimumScaleFactor() );
             if ( callback ) callback();
         } );
     }
