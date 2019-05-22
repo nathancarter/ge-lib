@@ -155,15 +155,26 @@ class GroupRenderer {
             } );
         } );
     }
-    // If subclasses have different preferred sizing constants for
-    // different file output formats, they can implement those here.
-    // Stubs do nothing.  There is no need for a separate function
-    // for PNGs, because they are converted faithfully from PDFs.
-    // But since the conversion from SVG to PDF doesn't seem to
-    // preserve font sizes perfectly, we need two functions, so that
-    // subclasses can adjust to work around that.
-    setupSizeForSVG ( callback ) { if ( callback ) callback(); }
-    setupSizeForPDF ( callback ) { if ( callback ) callback(); }
+    // Since the conversion from SVG to PDF doesn't seem to preserve
+    // font sizes perfectly, we need two functions, one for setting up
+    // renderer size expecting SVG output (regular font size) and one
+    // expecting PDF output (slightly smaller font size).  Subclasses
+    // should just implement chooseGoodSize().
+    setupSizeForSVG ( callback ) {
+        this.computeRepresentations( () => {
+            this.set( 'fontScale', 1 );
+            this.chooseGoodSize();
+            if ( callback ) callback();
+        } );
+    }
+    setupSizeForPDF ( callback ) {
+        this.computeRepresentations( () => {
+            this.set( 'fontScale', 0.75 );
+            this.chooseGoodSize();
+            if ( callback ) callback();
+        } );
+    }
+    chooseGoodSize () { }
     // Default draw method is just a stub.  Subclasses write this.
     draw () { }
     // Convenience function for looking up whether an element is

@@ -80,26 +80,11 @@ class CycleGraphRenderer extends GroupRenderer {
                         * ( h - m.top - m.bottom ) + m.top + m.bottom ) / h;
         return Math.max( xfactor, yfactor );
     }
-    // Combine the above functions to fill in the size-computing
-    // stubs the superclass uses when someone calls renderSVGFile(),
-    // renderPDFFile(), or renderPNGFile().
-    setupSizeForSVG ( callback ) {
-        this.computeRepresentations( () => {
-            this.set( 'fontScale', 1 );
-            this.set( 'radius', this.minimumRadius() );
-            this.setMarginsFromRadius();
-            this.resizeBy( this.minimumScaleFactor() );
-            if ( callback ) callback();
-        } );
-    }
-    setupSizeForPDF ( callback ) {
-        this.computeRepresentations( () => {
-            this.set( 'fontScale', 0.75 );
-            this.set( 'radius', this.minimumRadius() );
-            this.setMarginsFromRadius();
-            this.resizeBy( this.minimumScaleFactor() );
-            if ( callback ) callback();
-        } );
+    // Choose a sensible minimum size based on the current font scale.
+    chooseGoodSize () {
+        this.set( 'radius', this.minimumRadius() );
+        this.setMarginsFromRadius();
+        this.resizeBy( this.minimumScaleFactor() );
     }
     // The main drawing routine for cycle graphs.
     draw () {
