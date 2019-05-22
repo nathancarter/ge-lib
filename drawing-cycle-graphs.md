@@ -16,9 +16,77 @@ constructor:
 const cg = new GE.CycleGraph( GE.Library.loadByName( 'Z_5' ) );
 ```
 
-## Properties
+## Optional highlighting
 
-You can then access the following properties of the cycle graph.
+The content of this section is not necessary to visualize your
+cycle graph; you can jump to the next section immediately if your
+cycle graph doesn't require highlighting any elements.
+
+You can highlight a partition of the elements using any of the
+following methods:
+
+```js
+var partition;
+// highlight background to show conjugacy classes
+partition = cg.group.conjugacyClasses.map( cl => cl.toArray() );
+cg.highlightByBackground( partition );
+// highlight border to show order classes
+partition = cg.group.orderClasses.map( cl => cl.toArray() );
+cg.highlightByBorder( partition );
+// you can also highlightByTop()
+```
+
+To highlight just a subset instead of a partition, treat that subset
+as if it were a one-part (usually non-exhaustive) "partition," like so:
+
+```js
+const subset = cg.group.subgroups[1];
+cg.highlightByBackground( [ subset ] );
+```
+
+This puts all elements outside the subset into another part of the
+partition, which receives no highlighting.
+
+## Making an SVG
+
+To draw a cycle graph as an SVG, create an instance of the
+`CycleGraphSVG` class, passing your `CycleGraph` to the constructor.
+
+```js
+const toBeDrawn = new GE.CycleGraphSVG( cg );
+```
+
+Then it needs to asynchronously do a bunch of computations to prepare
+to render the elements' names in pretty printed mathematics.  To do
+so and to then compute a sensible size for the resulting SVG based on
+the size of those element names, use the `setupSizeForSVG()` function.
+In its callback, you can get the SVG code as a string or save it to a
+file.
+
+```js
+toBeDrawn.setupSizeForPDF( () => {
+    toBeDrawn.render( svg => console.log( svg ) ); // print to stdout
+    toBeDrawn.renderToFile( 'my-cycle-graph.svg' ); // more useful
+} );
+```
+
+The `renderToFile()` function is also asynchronous and takes an
+optional callback as its second argument.
+
+## Making a PDF or a PNG
+
+After you have an SVG, you can convert it very faithfully to a PDF
+with the command-line utility `rsvg-convert`, part of `librsvg`.  See
+[the script for that purpose](./topdf.sh) in this repository.
+
+Once you have a PDF, you can convert it very faithfully to a PNG
+with the command-line utility `convert`, part of ImageMagick.  See
+[the script for that purpose](./topng.sh) in this repository.
+
+## Properties of cycle graph objects
+
+You can access the following properties of the `CycleGraph` object
+(not the `CycleGraphSVG` object).
 
  * Its bounding box
     * `cg.bbox.left`
@@ -53,10 +121,10 @@ You can then access the following properties of the cycle graph.
       successive pair)
        * `cg.cyclePaths[i].pathIndex`
 
-## Simple example
+## Old example
 
-Using the above properties, the following function dumps a text
-representation of a cycle graph's data to the JavaScript console.
+The following example was provided before there was a way to actually draw
+cycle graphs with `CycleGraphSVG`.  It is kept here merely for reference.
 
 ```js
 const dumpCycleGraph = ( cg, precision = 3 ) => {
@@ -85,7 +153,3 @@ const dumpCycleGraph = ( cg, precision = 3 ) => {
     } );
 };
 ```
-
-## Drawing SVGs, PDFs, and PNGs
-
-Features not yet implemented; check back later!
