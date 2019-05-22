@@ -14,7 +14,7 @@ class CycleGraphSVG {
         return MMLDB.get( this.cg.group.representation[a] ).svg;
     }
     render ( callback ) {
-        MMLDB.add( this.cg.group.representation, () => {
+        MMLDB.add( this.cg.group, () => {
             this.canvas.clear();
             const bbox = this.cg.bbox;
             this.cg.group.elements.map( a => {
