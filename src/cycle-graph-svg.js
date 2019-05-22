@@ -78,15 +78,20 @@ class CycleGraphSVG extends GroupSVGRenderer {
         return Math.max( xfactor, yfactor );
     }
     // Combine the above functions into conveniences for the client.
-    setupSizeForSVG () {
-        this.set( 'radius', this.minimumRadius() * 0.8 );
-        this.setMarginsFromRadius();
-        this.resizeBy( this.minimumScaleFactor() );
-        this.set( 'fontScale', 1 );
+    setupSizeForSVG ( callback ) {
+        this.computeRepresentations( () => {
+            this.set( 'radius', this.minimumRadius() * 0.8 );
+            this.setMarginsFromRadius();
+            this.resizeBy( this.minimumScaleFactor() );
+            this.set( 'fontScale', 1 );
+            if ( callback ) callback();
+        } );
     }
-    setupSizeForPDF () {
-        this.setupSizeForSVG();
-        this.set( 'fontScale', 0.75 );
+    setupSizeForPDF ( callback ) {
+        this.setupSizeForSVG( () => {
+            this.set( 'fontScale', 0.75 );
+            if ( callback ) callback();
+        } );
     }
     // The main drawing routine for cycle graphs.
     draw () {
