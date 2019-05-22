@@ -42,7 +42,7 @@ class CycleGraphSVG extends GroupSVGRenderer {
         return this.viz.group.elements.map( a => {
             const dims = this.representationSize( a );
             return Math.max( dims.w, dims.h );
-        } ).reduce( ( a, b ) => Math.max( a, b ) ) * 0.6;
+        } ).reduce( ( a, b ) => Math.max( a, b ) ) * 0.65;
         // 0.6 because circle diameter = 1.2 * name size, for margin
     }
     // Expand the margins to be just bigger than the current radius.
@@ -96,7 +96,7 @@ class CycleGraphSVG extends GroupSVGRenderer {
     // The main drawing routine for cycle graphs.
     draw () {
         const lineWidth = this.get( 'lineWidth' )
-                       || this.get( 'width' ) / 300;
+                       || this.get( 'width' ) / 500;
         // Draw all paths first, beneath the nodes.  Always black.
         this.viz.cyclePaths.map( path => {
             for ( var i = 0 ; i < path.length - 1 ; i++ ) {
