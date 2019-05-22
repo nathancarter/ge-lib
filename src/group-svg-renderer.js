@@ -18,7 +18,12 @@ class GroupSVGRenderer {
         this.viz = visualizer;
         this.canvas = SVG.create();
         this.representationsComputed = false;
+        this.options = { };
     }
+    // Use these functions to set or get options that subclasses
+    // may respect while drawing the SVG.
+    set ( key, value ) { this.options[key] = value; }
+    get ( key ) { return this.options[key]; }
     // Once the thing is rendered, you can ask for it in SVG
     // format.
     svg () { return this.canvas.svg(); }
@@ -36,10 +41,34 @@ class GroupSVGRenderer {
     // If you haven't run computeAllNames() and let it finish its
     // callback, this will throw an error.
     representation ( a ) {
+        return this.representationData( a ).svg;
+    }
+    // Same as previous, but returns all representation data, not
+    // just the SVG code.
+    representationData ( a ) {
         if ( !this.representationsComputed )
             throw 'Cannot fetch element representation '
                 + 'if computeRepresentations() has not finished.';
-        return MMLDB.get( this.viz.group.representation[a] ).svg;
+        return MMLDB.get( this.viz.group.representation[a] );
+    }
+    // Complete ad-hoc estimate of how big the text for a
+    // representation is, in abstract SVG user units.  If I ever
+    // later figure out the correct way to do this, I can drop
+    // these magic constants.
+    representationSize ( a ) {
+        const data = this.representationData( a );
+        return {
+            w : parseFloat( data.width ) * 8,
+            h : parseFloat( data.height ) * 8
+        };
+    }
+    // Write the representation of an element centered on a given
+    // point on the canvas.
+    writeElement ( a, x, y ) {
+        const size = this.representationSize( a );
+        const name = this.representation( a );
+        return this.canvas.insertSVG( name )
+                          .move( x - size.w / 2, y - size.h / 2 );
     }
     // Render group to SVG asynchronously, calling the internal
     // draw() method to fill the canvas with the group's
