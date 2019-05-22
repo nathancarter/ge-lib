@@ -64,7 +64,7 @@ In its callback, you can get the SVG code as a string or save it to a
 file.
 
 ```js
-toBeDrawn.setupSizeForPDF( () => {
+toBeDrawn.setupSizeForSVG( () => {
     toBeDrawn.render( svg => console.log( svg ) ); // print to stdout
     toBeDrawn.renderToFile( 'my-cycle-graph.svg' ); // more useful
 } );
