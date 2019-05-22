@@ -21,8 +21,8 @@ For now, we're just getting started.  Check back later!
 ## Documentation
 
 So far we have very little.  We will accumulate it here.
- * [Basic API for this module](basic-api.md)
- * [Drawing cycle graphs](drawing-cycle-graphs.md)
+ * [Basic API for this module](docs/basic-api.md)
+ * [Drawing cycle graphs](docs/drawing-cycle-graphs.md)
 
 ## License
 
