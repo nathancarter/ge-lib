@@ -9,6 +9,10 @@
 const SVG = require( './svg-utils' );
 // We want to be able to convert MathML to SVGs:
 const MMLDB = require( './mathml-svg-db' );
+// We will occasionally write intermediate results to temp files:
+const tempfile = require( 'tempfile' )
+// We will occasionally run conversion routines in CLI scripts:
+const { exec } = require( 'child_process' );
 
 // The main class of this module:
 class GroupSVGRenderer {
@@ -107,13 +111,40 @@ class GroupSVGRenderer {
     }
     // Same as previous, but save to a file, then call callback.
     // Callback is still passed the SVG code that was saved to the file.
-    renderToFile ( filename, callback ) {
-        this.render( svg =>
-            require( 'fs' ).writeFile( filename, svg, err => {
-                if ( err ) throw err;
-                if ( callback ) callback ( svg );
-            } ) );
+    renderSVGFile ( filename, callback ) {
+        this.setupSizeForSVG( () => {
+            this.render( svg => {
+                require( 'fs' ).writeFile( filename, svg, err => {
+                    if ( err ) throw err;
+                    if ( callback ) callback ( svg );
+                } )
+            } );
+        } );
     }
+    // Same as previous, but save to a temp SVG file, then call a shell
+    // script to convert to the desired PDF file, then delete the temp
+    // file, then call the callback with the SVG code.
+    renderPDFFile ( filename, callback ) {
+        this.setupSizeForPDF( () => {
+            this.render( svg => {
+                const tmpfile = tempfile( '.svg' );
+                require( 'fs' ).writeFile( tmpfile, svg, err => {
+                    if ( err ) throw err;
+                    const cmd =
+                        `rsvg-convert -f pdf -o ${filename} ${tmpfile}`;
+                    exec( cmd, ( err, stdout, stderr ) => {
+                        if ( err ) throw err;
+                        if ( callback ) callback ( svg );
+                    } );
+                } );
+            } );
+        } );
+    }
+    // If subclasses have different preferred sizing constants for
+    // different file output formats, they can implement those here.
+    // Stubs do nothing.
+    setupSizeForSVG ( callback ) { if ( callback ) callback(); }
+    setupSizeForPDF ( callback ) { if ( callback ) callback(); }
     // Default draw method is just a stub.  Subclasses write this.
     draw () { }
     // Convenience function for looking up whether an element is

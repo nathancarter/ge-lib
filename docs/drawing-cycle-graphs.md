@@ -56,45 +56,34 @@ To draw a cycle graph as an SVG, create an instance of the
 const toBeDrawn = new GE.CycleGraphSVG( cg );
 ```
 
-Then it needs to asynchronously do a bunch of computations to prepare
-to render the elements' names in pretty printed mathematics.  To do
-so and to then compute a sensible size for the resulting SVG based on
-the size of those element names, use the `setupSizeForSVG()` function.
-In its callback, you can get the SVG code as a string or save it to a
-file.
+To dump the result to a file, use any one of the following calls.
 
 ```js
-toBeDrawn.setupSizeForSVG( () => {
-    toBeDrawn.render( svg => console.log( svg ) ); // print to stdout
-    toBeDrawn.renderToFile( 'my-cycle-graph.svg' ); // more useful
-} );
+CGSVG.renderSVGFile( 'cycle-graph.svg' );
+CGSVG.renderPDFFile( 'cycle-graph.pdf' );
 ```
 
-The `renderToFile()` function is also asynchronous and takes an
-optional callback as its second argument.
+Both are asynchronous and take an optional callback as second argument.
+The reason for this is that they begin by doing a bunch of asynchronous
+renderings of element names from MathML to SVGs before using the
+results to compute best sizes for the resulting renderings.
+
+*Consequently it is important to NOT run both of those commands in
+immediate succession.*  Since they are asynchronous, they will try to
+run both simultaneously on the same object (`CGSVG`) and thus will both
+be manipulating its internal state at the same time, which is not what
+you want.
 
 ## A complete example
 
-We provide a minimal script that creates an SVG file for the cycle graph
-of a group appears, together with the resulting image.
+We provide a minimal script that can create an SVG or PDF file for the cycle
+graph of a group, together with the resulting images.
 
  * [Script: `examples/cycle-graph.js`](../examples/cycle-graph.js)
  * [Result: `examples/cycle-graph.svg`](../examples/cycle-graph.svg)
-
-## Making a PDF or a PNG
-
-After you have an SVG, you can convert it very faithfully to a PDF
-with the command-line utility `rsvg-convert`, part of `librsvg`.  See
-[the script for that purpose](./topdf.sh) in this repository.
-
-Because the conversion from SVG to PDF somehow messes with fonts, we
-recommend that if your goal is to do such a conversion, that you make
-the fonts *incorrect* in the SVG in the first place, so that they
-will come out correct in the PDF after conversion.  To do so, simply
-replace the `setupSizeForSVG` call in the example above with a call to
-`setupSizeForPDF` instead.
-
  * [Result: `examples/cycle-graph.pdf`](../examples/cycle-graph.pdf)
+
+## Making a PNG
 
 Once you have a PDF, you can convert it very faithfully to a PNG
 with the command-line utility `convert`, part of ImageMagick.  See

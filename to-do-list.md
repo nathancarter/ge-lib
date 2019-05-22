@@ -1,11 +1,13 @@
 
 # To-do list
 
+## Miscellaneous
+
+ * Now that `CycleGraphSVG` and `GroupSVGRenderer` handle multiple
+   file formats, change their names to not include "SVG."
+
 ## Cycle graphs
 
- * Rename `GroupSVGRenderer.renderToFile()` to `renderSVGFile()`.
- * Add `GroupSVGRenderer.renderPDFFile()` that writes a temp SVG
-   file, runs `rsvg-convert` on it, then discards the temp file.
  * Add `GroupSVGRenderer.renderPNGFile()` that writes a temp PDF
    file, runs `convert` on it, then discards the temp file.
 

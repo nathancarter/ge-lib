@@ -15,7 +15,6 @@ const CGSVG = new GE.CycleGraphSVG( CG );
 CG.highlightByBackground( group.conjugacyClasses.map( c => c.toArray() ) );
 CG.highlightByTop( group.orderClasses.map( c => c.toArray() ) );
 
-// To render an SVG version:
-CGSVG.setupSizeForSVG( () => {
-    CGSVG.renderToFile( 'cycle-graph.svg' );
-} );
+// To render an SVG/PDF, uncomment one of the lines below:
+CGSVG.renderSVGFile( 'cycle-graph.svg' );
+// CGSVG.renderPDFFile( 'cycle-graph.pdf' );
