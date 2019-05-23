@@ -98,8 +98,8 @@ constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
 
 ## A complete example
 
-We provide a minimal script that can create an SVG, PDF, or PNG file for the
-multiplication table of a group, together with the resulting images.
+We provide a minimal script that can create an SVG, PDF, or PNG file for a
+symmetry object for a group, together with the resulting images.
 
  * [Script: `examples/symmetry-object.js`](../examples/symmetry-object.js)
  * [Result: `examples/symmetry-object.svg`](../examples/symmetry-object.svg)

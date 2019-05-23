@@ -5,7 +5,7 @@ const GE = require( '../index' );
 // Create a group
 const group = GE.Library.loadByName( 'A_5' );
 
-// Create a multiplication table for it
+// Create a Symmetry Object for it
 const SO = GE.SymmetryObject.generate( group, group.symmetryObjects[0].name );
 
 // Create a renderer for the symmetry object (can produce SVG, PDF, and PNG)
