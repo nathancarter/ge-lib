@@ -75,29 +75,4 @@ const showCayleyDiagram = ( cd, precision = 3 ) => {
     } );
 };
 
-//// How to create the multiplication table for a group:
-// GE.Library.loadByName( 'S_3' );
-// const CD = new GE.CayleyDiagram( GE.Library.getByName( 'S_3' ) );
-// showCayleyDiagram( CD );
-
-//// Utility function for displaying a symmetry object:
-const showSymmetryObject = ( so, precision = 3 ) => {
-    const f = n => Number( n ).toFixed( precision );
-    console.log( `Symmetry object ${so.name} for "${so.group.shortName}":` );
-    so.nodes.map( node => {
-        console.log( `\t${node.color} (${f(node.point.x)},${f(node.point.y)},${f(node.point.z)}) `
-                   + `r=${node.radius}` );
-    } );
-    so.lines.map( line => {
-        console.log( `\t${line.color} ` + line.vertices.map( pt =>
-            `(${f(pt.point.x)},${f(pt.point.y)},${f(pt.point.z)})`
-        ).join( line.arrowhead ? '->' : '--' ) );
-    } );
-};
-
-//// How to create the multiplication table for a group:
-// const A_4 = GE.Library.loadByName( 'A_4' );
-// const SO = GE.SymmetryObject.generate( A_4, A_4.symmetryObjects[0].name );
-// showSymmetryObject( SO );
-
 console.log( GE.Library.allGroupNamesInFilesystem() );

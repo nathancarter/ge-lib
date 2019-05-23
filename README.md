@@ -25,6 +25,7 @@ So far we are only about one-third done.  We will accumulate more here.
  * [Basic API for this module](docs/basic-api.md)
  * [Drawing multiplication tables](docs/drawing-multiplication-tables.md)
  * [Drawing cycle graphs](docs/drawing-cycle-graphs.md)
+ * [Drawing symmetry objects](docs/drawing-symmetry-objects.md)
 
 ## License
 

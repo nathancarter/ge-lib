@@ -15,10 +15,8 @@
 
 ## Symmetry objects
 
- * Transfer the knowledge in `showSymmetryObject` into an `.md` file.
-   In particular, make it clear how to fetch the list of names of all
-   symmetry objects for a group, and how to create one from each
-   name on the list.
+ * Complete the section of the Drawing Symmetry Objects document that
+   will list the properties of `SymmetryObject` instances.
  * Write a Drawing Symmetry Objects document parallel to the others.
  * To complete the API for everything you can do in GE with SOs:
  * Add documentation for `fogLevel`.
