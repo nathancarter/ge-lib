@@ -77,6 +77,8 @@ constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
    the symmetry object is viewed with a large empty space around it, and
    values greater than 1 zoom in; typically even 1.5 will clip some parts
    of the object outside the borders of the resulting image.
+ * `lineWidth` - the default is 5, and any value larger than 0 is acceptable.
+   The results are directly proportional to the value provided.
 
 ## A complete example
 

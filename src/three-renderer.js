@@ -33,6 +33,7 @@ class ThreeRenderer extends GroupRenderer {
         this.yzscale = 1;
         this.set( 'fogLevel', 0.75 ); // range: [0,1]
         this.set( 'zoomLevel', 1 ); // range unclear
+        this.set( 'lineWidth', 5 ); // must be >0
         // We store the list of balls and sticks in the following member
         // variables.  Subclasses can populate these with the functions given
         // immediately below.  We then use this data to populate the scene at
@@ -159,7 +160,7 @@ class ThreeRenderer extends GroupRenderer {
             geometry,
             new THREE.LineBasicMaterial( {
                 color : this.adjustColor( line.color, midpt ),
-                linewidth : 5
+                linewidth : this.get( 'lineWidth' )
             } )
         ) );
     }
