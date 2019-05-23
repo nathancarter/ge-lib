@@ -32,6 +32,7 @@ class ThreeRenderer extends GroupRenderer {
         // It's a hack, sorry.  Set it to -1 for generated Cayley diagrams.
         this.yzscale = 1;
         this.set( 'fogLevel', 0.75 ); // range: [0,1]
+        this.set( 'zoomLevel', 1 ); // range unclear
         // We store the list of balls and sticks in the following member
         // variables.  Subclasses can populate these with the functions given
         // immediately below.  We then use this data to populate the scene at
@@ -73,6 +74,7 @@ class ThreeRenderer extends GroupRenderer {
         const w = this.get( 'width' );
         const h = this.get( 'height' );
         this.camera.aspect = w / h;
+        this.camera.zoom = this.get( 'zoomLevel' );
         this.camera.updateProjectionMatrix();
         // delete everything in the scene
         this.scene.children.slice().map( child => this.scene.remove( child ) );
