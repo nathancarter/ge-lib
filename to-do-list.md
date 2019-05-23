@@ -3,16 +3,12 @@
 
 ## Symmetry objects
 
- * Complete the section of the Drawing Symmetry Objects document that
-   will list the properties of `SymmetryObject` instances.
- * Write a Drawing Symmetry Objects document parallel to the others.
  * To complete the API for everything you can do in GE with SOs:
- * Add documentation for `fogLevel`.
- * Add support and documentation for each of the following.
-    * `zoomLevel`
-    * `lineWidth`
-    * `nodeScale`
-    * positioning the camera
+    * Add support and documentation for each of the following.
+       * `zoomLevel`
+       * `lineWidth`
+       * `nodeScale`
+       * positioning the camera
 
 ## Cayley diagrams
 

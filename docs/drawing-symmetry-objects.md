@@ -89,7 +89,28 @@ multiplication table of a group, together with the resulting images.
 You can access the following properties of the `SymmetryObject` instance
 (not the `SymmetryObjectRenderer` instance).
 
- * To be filled in (documentation not yet complete)
+ * The vertices (or "nodes") in the symmetry object
+    * `so.nodes`, each with these properties:
+       * `so.nodes[i].color` - an HTML color string, such as `"#ff0000"`
+       * `so.nodes[i].point` - an instance of `Vector3` from the
+         [three.js](https://threejs.org) library, which has three main
+         attributes:
+          * `so.nodes[i].point.x`
+          * `so.nodes[i].point.y`
+          * `so.nodes[i].point.z`
+       * `so.nodes[i].radius` - the radius of the sphere to be drawn at
+         this vertex/node
+ * The lines in the symmetry object, which are badly named, because they
+   are actually piecewise linear paths, which can therefore be used to
+   represent curves, not just lines
+    * `so.lines`, each with these properties:
+       * `so.lines[i].vertices` - the list of vertices on the path (just
+         two for a line segment, or more for a nonlinear path), each of
+         which is a `Vector3`, thus having these properties:
+          * `so.lines[i].vertices[j].x`
+          * `so.lines[i].vertices[j].y`
+          * `so.lines[i].vertices[j].z`
+       * `so.lines[i].color` - an HTML color string, such as `"#000000"`
 
 ## Old example
 
