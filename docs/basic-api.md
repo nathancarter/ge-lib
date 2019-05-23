@@ -99,7 +99,10 @@ has that multiplication table.  To do so, proceed as follows.
 const myMT = [ [ 0, 1, 2 ], [ 1, 2, 0 ], [ 2, 0, 1 ] ];
 const myGroup = new GE.BasicGroup( myMT );
 const official = GE.IsomorphicGroups.find( myGroup );
-dumpGroup( official );
+if ( official )
+    dumpGroup( official );
+else
+    console.log( 'No group with that table.' );
 ```
 
 ```
