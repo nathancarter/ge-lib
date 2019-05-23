@@ -75,7 +75,28 @@ multiplication table of a group, together with the resulting images.
 You can access the following properties of the `Multtable` object
 (not the `MulttableRenderer` object).
 
- * To be filled in (documentation not yet complete)
+ * The elements of the group, in the order they appear across the top row
+   of the table (which is the same order in which they appear down its
+   leftmost column as well)
+    * `mt.elements`
+ * How to separate the cosets of a chosen subgroup
+    * `mt.separation` - the distance to separate cosets,
+      0 for no separation, 1 to separate them by the size of a single table
+      cell, or any other number
+    * `mt.stride` - the order of the coset by which we're separating.
+      Ensure that the coset's elements are the first `mt.stride` entries in
+      `mt.elements`.  An easy way to do so is with the following function.
+```js
+// if 0 <= i < group.subgroups.length:
+mt.organizeBySubgroup( group.subgroups[i] );
+```
+ * The color scheme to use for cell backgrounds, from a choice of three:
+    * Set `mt.coloration = Multtable.COLORATION_RAINBOW` for the default
+      behavior, which colors elements from red through purple hues.
+    * Set `mt.coloration = Multtable.COLORATION_GRAYSCALE` to use shades
+      of gray instead.
+    * Set `mt.coloration = Multtable.COLORATION_NONE` to use no background
+      colors for cells.
 
 ## Old example
 

@@ -1,18 +1,6 @@
 
 # To-do list
 
-## Multiplication tables
-
- * Complete the section of the Drawing Multiplication Tables
-   document that will list the properties of `Multtable` instances.
- * To complete the API for everything you can do in GE with MTs:
-    * Add to the `.md` doc the
-      `multtable.organizeBySubgroup(index)` function.
-    * Add to the `.md` doc the constants that can be assigned to
-      `multtable.colors`: `Multtable.COLORATION_RAINBOW`,
-      `Multtable.COLORATION_GRAYSCALE`, and
-      `Multtable.COLORATION_NONE`.
-
 ## Symmetry objects
 
  * Complete the section of the Drawing Symmetry Objects document that
