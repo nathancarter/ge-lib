@@ -31,7 +31,7 @@ class ThreeRenderer extends GroupRenderer {
         // generated diagrams are treated differently than hard-coded diagrams.
         // It's a hack, sorry.  Set it to -1 for generated Cayley diagrams.
         this.yzscale = 1;
-        this.set( 'fogLevel', 0.75 ); // range: [0,1]
+        this.set( 'fogLevel', 0 ); // range: [0,1]
         this.set( 'zoomLevel', 1 ); // range unclear
         this.set( 'lineWidth', 5 ); // must be >0
         this.set( 'nodeScale', 1 ); // must be >0

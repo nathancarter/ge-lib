@@ -73,6 +73,7 @@ constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
  * `fogLevel` - between 0 and 1, 0 meaning no fog and 1 meaning maximal fog.
    Fog causes more distant parts of the scene to fade into the background
    and can be helpful for indicating depth in a static image.
+   The default is 0, but 3D objects often look better with this at about 0.75.
  * `zoomLevel` - the default is 1, values between 0 and 1 zoom out so that
    the symmetry object is viewed with a large empty space around it, and
    values greater than 1 zoom in; typically even 1.5 will clip some parts
