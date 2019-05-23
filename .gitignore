@@ -1,3 +1,4 @@
+.DS_Store
 svg-test.*
 src/.tmp/
 node_modules/
