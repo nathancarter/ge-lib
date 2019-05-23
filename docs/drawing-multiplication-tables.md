@@ -2,7 +2,7 @@
 # Drawing Multiplication Tables
 
 This file will document how to use `ge-lib.js` to draw multiplication
-tables. This is a first draft, so expect rough edges.
+tables.
 
 This file expects that you have read the
 [Basic API](basic-api.md) document.
@@ -44,9 +44,9 @@ const toBeDrawn = new GE.MulttableRenderer( mt );
 To dump the result to a file, use any one of the following calls.
 
 ```js
-toBeDrawn.renderSVGFile( 'cycle-graph.svg' );
-toBeDrawn.renderPDFFile( 'cycle-graph.pdf' );
-toBeDrawn.renderPNGFile( 'cycle-graph.png' );
+toBeDrawn.renderSVGFile( 'multiplication-table.svg' );
+toBeDrawn.renderPDFFile( 'multiplication-table.pdf' );
+toBeDrawn.renderPNGFile( 'multiplication-table.png' );
 ```
 
 All are asynchronous and take an optional callback as second argument. The
@@ -84,7 +84,7 @@ multiplication tables with `MulttableRenderer`.  It is kept here merely for
 reference.
 
 ```js
-const showMultTable = mt => {
+const dumpMultTable = mt => {
     console.log( `Multiplication Table for "${mt.group.shortName}"`
                + ` (${mt.size}x${mt.size}):` );
     for ( var i = 0 ; i < mt.group.order ; i++ ) {
