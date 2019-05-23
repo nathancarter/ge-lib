@@ -21,8 +21,7 @@ require( `${__dirname}/../node_modules/three/examples/js/renderers/SVGRenderer` 
 class ThreeRenderer extends GroupRenderer {
     constructor ( visualizer ) {
         super( visualizer );
-        this.camera = new THREE.PerspectiveCamera( 45, 1, 0.1, 2000 );
-        this.camera.position.z = 10;
+        this.camera = new THREE.PerspectiveCamera( 45, 1, 0.1, 100 );
         this.scene = new THREE.Scene();
         this.bgcolor = new THREE.Color( 1, 1, 1 );
         this.scene.background = this.bgcolor;
@@ -35,6 +34,7 @@ class ThreeRenderer extends GroupRenderer {
         this.set( 'zoomLevel', 1 ); // range unclear
         this.set( 'lineWidth', 5 ); // must be >0
         this.set( 'nodeScale', 1 ); // must be >0
+        this.set( 'arrowheadPlacement', 1 ); // range: [0,1]
         // We store the list of balls and sticks in the following member
         // variables.  Subclasses can populate these with the functions given
         // immediately below.  We then use this data to populate the scene at
@@ -52,12 +52,14 @@ class ThreeRenderer extends GroupRenderer {
     }
     // To clear all vertices, use this:
     clearVertices () { this.vertices = [ ]; }
-    // To add a line segment, provide starting and ending position, plus color:
-    addLine ( x1, y1, z1, x2, y2, z2, c ) {
+    // To add a line segment, provide starting and ending position, plus color,
+    // and optionally whether it has an arrowhead (defaults to false):
+    addLine ( x1, y1, z1, x2, y2, z2, c, a ) {
         this.lines.push( {
             from : new THREE.Vector3( x1, y1, z1 ),
             to : new THREE.Vector3( x2, y2, z2 ),
-            color : new THREE.Color( c )
+            color : new THREE.Color( c ),
+            arrowhead : !!a
         } );
     }
     // To clear all lines, use this:
@@ -82,6 +84,13 @@ class ThreeRenderer extends GroupRenderer {
         this.scene.children.slice().map( child => this.scene.remove( child ) );
         // let subclasses populate the scene
         this.vertices.map( v => this.addVertexToScene( v ) );
+        // slight workaround for three.js SVGRenderer bug:
+        // https://github.com/mrdoob/three.js/issues/16540
+        this.vertices.map( v => {
+            const sphere = this.addVertexToScene( v );
+            sphere.rotateX( 0.1 );
+        } );
+        // (end of workaround)
         this.lines.map( l => this.addLineToScene( l ) );
         // render the scene at the desired size using the camera
         this.renderer.setSize( w, h );
@@ -169,8 +178,16 @@ class ThreeRenderer extends GroupRenderer {
               .translateY( vertex.pos.y )
               .translateZ( vertex.pos.z );
         this.scene.add( sphere );
+        return sphere;
     }
     addLineToScene( line ) {
+        // add the line itself
+
+        ///
+        /// Right now this only adds straight lines.
+        /// Later we must add code taht repsects the line's style (straight/curved).
+        ///
+
         var geometry = new THREE.BufferGeometry();
         geometry.addAttribute( 'position',
             new THREE.Float32BufferAttribute( [
@@ -178,13 +195,35 @@ class ThreeRenderer extends GroupRenderer {
                 line.to.x, line.to.y, line.to.z
             ], 3 ) );
         const midpt = line.from.clone().add( line.to ).divideScalar( 2 );
+        const color = this.adjustColor( line.color, midpt );
         this.scene.add( new THREE.Line(
             geometry,
             new THREE.LineBasicMaterial( {
-                color : this.adjustColor( line.color, midpt ),
+                color : color,
                 linewidth : this.get( 'lineWidth' )
             } )
         ) );
+        // if it has no arrowhead, stop here
+        if ( !line.arrowhead ) return;
+        // ok, it has an arrowhead, so let's add that, imitating code from
+        // GE's updateArrowheads() in DisplayDiagram.js.
+        const nodeRadius = this.vertices[0].radius * this.get( 'nodeScale' ),
+              length = line.from.distanceTo( line.to ),
+              headLength = Math.min( nodeRadius, ( length - 2 * nodeRadius ) / 2 ),
+              headWidth = 0.6 * headLength * this.get( 'lineWidth' ) / 3,
+              arrowLength = 1.1 * headLength;
+        if ( length <= 2 * nodeRadius ) return;
+        const arrowPlace = 0.01 + ( nodeRadius
+                + ( length - 2 * nodeRadius - headLength )
+                    * this.get( 'arrowheadPlacement' )
+            ) / length;
+        const arrowDir = line.to.clone().sub( line.from ).normalize();
+        const arrowStart = new THREE.Vector3().addVectors(
+            line.from.clone().multiplyScalar( 1 - arrowPlace ),
+            line.to.clone().multiplyScalar( arrowPlace ) );
+        const arrowhead = new THREE.ArrowHelper(
+            arrowDir, arrowStart, arrowLength, color, headLength, headWidth );
+        this.scene.add( arrowhead );
     }
     // Function to adjust a color to make it seem as if the scene has fog
     // (which THREE's SVGRenderer does not support by default):

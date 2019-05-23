@@ -3,9 +3,14 @@
 
 ## Cayley diagrams
 
- * Write a `CycleDiagramRenderer` class that accepts a `CayleyDiagram` in
-   its constructor, much like `DisplayDiagram` does, and that can
-   render to a string or to a file.
+ * Finish `CycleDiagramRenderer`:
+    * Support curved lines
+    * Consider replacing spheres with disc billboards before you proceed
+      with any of the rest of this stuff
+    * Add labels
+    * Support highlighting node backgrounds
+    * Support highlighting nodes by ring
+    * Support highlighting nodes by square
  * Complete the "Properties of Cayley Diagrams" section of the documetation.
  * To complete the API for everything you can do in GE with CDs:
     * Add to the `.md` doc how to create a named CD (and to get the
@@ -43,7 +48,8 @@ cayleyDiagram.arrowColors
 
 ## Finding groups
 
-Don't forget to document the `GE.IsomorphicGroups` features as well.
+Don't forget to document the rest of the `GE.IsomorphicGroups` features
+as well.
 
 ## Known issues
 
