@@ -23,6 +23,7 @@ For now, we're just getting started.  Check back later!
 
 So far we are only about one-third done.  We will accumulate more here.
  * [Basic API for this module](docs/basic-api.md)
+ * [Drawing Cayley diagrams](docs/drawing-symmetry-objects.md)
  * [Drawing multiplication tables](docs/drawing-multiplication-tables.md)
  * [Drawing cycle graphs](docs/drawing-cycle-graphs.md)
  * [Drawing symmetry objects](docs/drawing-symmetry-objects.md)

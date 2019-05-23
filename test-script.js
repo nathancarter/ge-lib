@@ -47,32 +47,5 @@ const showGroup = g => {
 // showGroup( z3orig );
 
 //// Utility function for displaying a Cayley graph:
-const showCayleyDiagram = ( cd, precision = 3 ) => {
-    const f = n => Number( n ).toFixed( precision );
-    console.log( `Cayley diagram for "${cd.group.shortName}":` );
-    cd.nodes.map( node => {
-        const color = new THREE.Color( node.color );
-        console.log( `\t${node.element} @ `
-                   + `(${f(node.point.x)},${f(node.point.y)},${f(node.point.z)}), `
-                   + `rgb: (${f(color.r)},${f(color.g)},${f(color.b)}), ${node.label}` );
-        // node.radius is typically undefined, so not dumping that out here
-        if ( node.colorHighlight )
-            console.log( `\t\tColor highlight: ${node.colorHighlight}` );
-        if ( node.ringHighlight )
-            console.log( `\t\tRing highlight: ${node.ringHighlight}` );
-        if ( node.squareHighlight )
-            console.log( `\t\tSquare highlight: ${node.squareHighlight}` );
-    } );
-    cd.lines.map( line => {
-        const arrow = line.arrowhead ? '->' : '--';
-        const cgroup = line.vertices[0].curvedGroup.map( v => v.element ).sort().join( ',' );
-        const style = line.style ? `curve in ${cgroup}`
-                                 : 'line';
-        console.log( `\t${line.arrow}-arrow: `
-                   + `${line.vertices[0].element}${arrow}${line.vertices[1].element} `
-                   + `${line.color} ${style}` );
-        // not reporting line.offset here, but it's the user-edited curvature
-    } );
-};
 
 console.log( GE.Library.allGroupNamesInFilesystem() );

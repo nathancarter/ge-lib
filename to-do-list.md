@@ -3,10 +3,10 @@
 
 ## Cayley diagrams
 
- * Transfer the knowledge in `showCayleyDiagram` into an `.md` file.
  * Write a `CycleDiagramRenderer` class that accepts a `CayleyDiagram` in
    its constructor, much like `DisplayDiagram` does, and that can
    render to a string or to a file.
+ * Complete the "Properties of Cayley Diagrams" section of the documetation.
  * To complete the API for everything you can do in GE with CDs:
     * Add to the `.md` doc how to create a named CD (and to get the
       list of named CDs for a group).  Create by passing the name to
