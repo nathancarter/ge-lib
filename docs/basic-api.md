@@ -59,3 +59,52 @@ take several seconds to complete.
 ```js
 GE.Library.loadAllFromFilesystem();  // slow, 2-3sec or more
 ```
+
+## Finding and showing groups
+
+Although this repository is for visualizing groups in SVG, PDF, or
+PNG format, sometimes it's useful to debug a group by dumping it
+to the terminal/console.  Here is a quick example of how to do so.
+
+```js
+const dumpGroup = g => {
+    console.log( `Group name: ${g.shortName}` );
+    g.elements.map( a =>
+        console.log( '\t' + g.elements.map( b =>
+            g.mult( a, b ) ).join( ' ' ) ) );
+};
+```
+
+This prints the multiplication table of a group, like so.
+
+```js
+dumpGroup( GE.Libary.loadByName( 'S_3' ) );
+```
+
+```
+Group name: S_3
+	0 1 2 3 4 5
+	1 2 0 5 3 4
+	2 0 1 4 5 3
+	3 4 5 0 1 2
+	4 5 3 2 0 1
+	5 3 4 1 2 0
+```
+
+It is also possible to go in the other direction; if you have the
+multiplication table for a group, you can find the group in the library that
+has that multiplication table.  To do so, proceed as follows.
+
+```js
+const myMT = [ [ 0, 1, 2 ], [ 1, 2, 0 ], [ 2, 0, 1 ] ];
+const myGroup = new GE.BasicGroup( myMT );
+const official = GE.IsomorphicGroups.find( myGroup );
+dumpGroup( official );
+```
+
+```
+Group name: Z_3
+    0 1 2
+    1 2 0
+    2 0 1
+```
