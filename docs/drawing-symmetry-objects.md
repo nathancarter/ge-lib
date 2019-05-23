@@ -79,6 +79,11 @@ constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
    of the object outside the borders of the resulting image.
  * `lineWidth` - the default is 5, and any value larger than 0 is acceptable.
    The results are directly proportional to the value provided.
+ * `nodeScale` - the default is 1, meaning to keep the nodes/vertices exactly
+   the same size they are defined in the diagram when it's loaded from the
+   group object.  If you provide a different factor here, it will make the
+   nodes proportionately larger or smaller by multiplying their radius by
+   this factor.  Values should be positive.
 
 ## A complete example
 

@@ -34,6 +34,7 @@ class ThreeRenderer extends GroupRenderer {
         this.set( 'fogLevel', 0.75 ); // range: [0,1]
         this.set( 'zoomLevel', 1 ); // range unclear
         this.set( 'lineWidth', 5 ); // must be >0
+        this.set( 'nodeScale', 1 ); // must be >0
         // We store the list of balls and sticks in the following member
         // variables.  Subclasses can populate these with the functions given
         // immediately below.  We then use this data to populate the scene at
@@ -139,7 +140,8 @@ class ThreeRenderer extends GroupRenderer {
     // Internal-use functions to add lines to the scene:
     addVertexToScene ( vertex ) {
         const sphere = new THREE.Mesh(
-            new THREE.SphereGeometry( vertex.radius, 12, 12 ),
+            new THREE.SphereGeometry(
+                vertex.radius * this.get( 'nodeScale' ), 12, 12 ),
             new THREE.MeshBasicMaterial( {
                 color : this.adjustColor( vertex.color, vertex.pos )
             } ) );
