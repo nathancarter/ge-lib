@@ -84,6 +84,16 @@ constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
    group object.  If you provide a different factor here, it will make the
    nodes proportionately larger or smaller by multiplying their radius by
    this factor.  Values should be positive.
+ * `cameraPos` - the default is undefined, which means that the renderer
+   will make a sensible guess of where a good place to put the camera is.
+   If you want to control it yourself, pass an object with `x`, `y`, and `z`
+   attributes, as in `set( 'cameraPos', { x : 2, y : 3, z : 4 } );`.
+ * `cameraUp` - If you provide no `cameraPos`, then in addition to guessing a
+   sensible camera position, a sensible camera "up" vector is also inferred.
+   If you provide a `cameraPos` but do not provide an up vector, then
+   (0,1,0) is assumed.  If you like, you may also provide `cameraUp` in the
+   same format as `cameraPos`.  This setting is ignored if you do not provide
+   `cameraPos`.
 
 ## A complete example
 

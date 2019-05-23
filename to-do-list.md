@@ -1,12 +1,6 @@
 
 # To-do list
 
-## Symmetry objects
-
- * To complete the API for everything you can do in GE with SOs:
-    * Add support and documentation for each of the following.
-       * positioning the camera
-
 ## Cayley diagrams
 
  * Transfer the knowledge in `showCayleyDiagram` into an `.md` file.

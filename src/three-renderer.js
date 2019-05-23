@@ -107,27 +107,47 @@ class ThreeRenderer extends GroupRenderer {
             .reduce( ( a, b ) => Math.max( a, b ) );
     }
     // Make a decent guess of where to put the camera, based on the locations
-    // of things in the scene.  This is copied from very similar code in
-    // Group Explorer's DisplayDiagram class, setCamera() method.
+    // of things in the scene.
     placeCamera () {
+        // if the user provided a camera in the options, use that
+        const userCam = this.get( 'cameraPos' );
+        if ( userCam ) {
+            this.camera.position.set( userCam.x, userCam.y, userCam.z );
+            const userCamUp = this.get( 'cameraUp' );
+            if ( userCamUp )
+                this.camera.up.set( userCamUp.x, userCamUp.y, userCamUp.z );
+            else
+                this.camera.up.set( 0, 1, 0 );
+            this.camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
+            return;
+        }
+        // Otherwise figure one out for ourselves.  This is copied from very
+        // similar code in Group Explorer's DisplayDiagram's setCamera().
         const points = this.vertices.map( v => v.pos )
             .concat( this.lines.map( l => l.from ) )
             .concat( this.lines.map( l => l.to ) );
+        // if everything is in the yz plane, look from x=3
         if ( points.every( p => p.x == 0.0 ) ) {
             this.camera.position.set( 3, 0, 0 );
             this.camera.up.set( 0, this.yzscale, 0 );
+        // if everything is in the xz plane, look from y=3
         } else if ( points.every( p => p.y == 0.0 ) ) {
             this.camera.position.set( 0, 3*this.yzscale, 0 );
             this.camera.up.set( 0, 0, -this.yzscale );
+        // if everything is in the xy plane, look from z=3
         } else if ( points.every( p => p.z == 0.0 ) ) {
             this.camera.position.set( 0, 0, 3*this.yzscale );
             this.camera.up.set( 0, this.yzscale, 0 );
+        // otherwise look from something sort of in the <1,1,1> direction,
+        // but not exactly, so that box corners don't hide one another, and
+        // so you can still tell that boxes and the like are 3D at 1st glance.
         } else {
             const pos = new THREE.Vector3( 1.7, 1.6*this.yzscale, 1.9*this.yzscale )
                                  .multiplyScalar( this.sceneRadius() );
             this.camera.position.set( pos.x, pos.y, pos.z );
             this.camera.up.set( 0, this.yzscale, 0 );
         }
+        // always look at the origin
         this.camera.lookAt( new THREE.Vector3( 0, 0, 0 ) );
     }
     // This is the routine to which we delegate the setup of the 3D scene.
