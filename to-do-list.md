@@ -13,10 +13,25 @@
       `Multtable.COLORATION_GRAYSCALE`, and
       `Multtable.COLORATION_NONE`.
 
+## Symmetry objects
+
+ * Transfer the knowledge in `showSymmetryObject` into an `.md` file.
+   In particular, make it clear how to fetch the list of names of all
+   symmetry objects for a group, and how to create one from each
+   name on the list.
+ * Write a Drawing Symmetry Objects document parallel to the others.
+ * To complete the API for everything you can do in GE with SOs:
+ * Add documentation for `fogLevel`.
+ * Add support and documentation for each of the following.
+    * `zoomLevel`
+    * `lineWidth`
+    * `nodeScale`
+    * positioning the camera
+
 ## Cayley diagrams
 
  * Transfer the knowledge in `showCayleyDiagram` into an `.md` file.
- * Write a `CycleDiagramSVG` class that accepts a `CayleyDiagram` in
+ * Write a `CycleDiagramRenderer` class that accepts a `CayleyDiagram` in
    its constructor, much like `DisplayDiagram` does, and that can
    render to a string or to a file.
  * To complete the API for everything you can do in GE with CDs:
@@ -42,31 +57,16 @@ cayleyDiagram.setLineColors();
     * Add to the `.md` doc how to specify whether to chunk: by
       default, `cd.chunk` is undefined; you can set it to an index
       into the strategy table.
- * Add features to the `CayleyDiagramSVG` class that support the
+ * Document those features that Cayley diagrams share with Symmetry
+   Objects, such as zoom, line width, etc.
+ * Add features to the `CayleyDiagramRenderer` class that support the
    following features that we support in 3D diagrams in GE.  Try
    to do so in a way that is re-usabale for symmetry objects later.
 ```js
-cayleyDiagram.zoomLevel
-cayleyDiagram.lineWidth
-cayleyDiagram.nodeScale
-cayleyDiagram.fogLevel
 cayleyDiagram.labelSize
 cayleyDiagram.arrowheadPlacement
 cayleyDiagram.arrowColors
-displayDiagram.camera.matrix.toArray()
 ```
-
-## Symmetry objects
-
- * Transfer the knowledge in `showSymmetryObject` into an `.md` file.
-   In particular, make it clear how to fetch the list of names of all
-   symmetry objects for a group, and how to create one from each
-   name on the list.
- * Write a `SymmetryObjectSVG` class that accepts a `SymmetryObject`
-   in its constructor, much like `DisplayCycleGraph` does, and that
-   can render to a string or to a file.
- * Add to the `.md` doc all information from Cayley diagrams that is
-   still relevant here (zoom, line thickness, node radius, fog).
 
 ## Finding groups
 
