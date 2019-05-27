@@ -124,7 +124,9 @@ You can access the following properties of the `SymmetryObject` instance
          this vertex/node
  * The lines in the symmetry object, which are badly named, because they
    are actually piecewise linear paths, which can therefore be used to
-   represent curves, not just lines
+   represent curves, not just lines (though the renderer reconstructs
+   this data into a cubic Bézier curve by fitting a model to the data,
+   so it's not drawn as piecewise linear)
     * `so.lines`, each with these properties:
        * `so.lines[i].vertices` - the list of vertices on the path (just
          two for a line segment, or more for a nonlinear path), each of

@@ -14,7 +14,8 @@ require( `${__dirname}/../node_modules/three/examples/js/renderers/SVGRenderer` 
 
 // Now the drawing class for 3D diagrams made of balls and sticks.
 // (Though many little sticks can be arranged into a piecewise linear
-// approximation of a curve.)
+// approximation of a curve, or a cubic Bézier curve can be fit to such
+// an array of points to create a smooth curve from them.)
 // (Note that while this class can render many different formats,
 // it constructs an SVG internally, then produces all other
 // formats by conversion after the fact.)

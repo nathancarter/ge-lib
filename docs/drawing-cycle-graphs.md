@@ -105,7 +105,8 @@ You can access the following properties of the `CycleGraph` object (not the
    is `cg.cyclePaths`, with the following data on each path
     * The number of points in the path and the coordinates of each
       (because each path is just a lot of line segments, a piecewise
-      linear approximation to a curve)
+      linear approximation to a curve, which the renderer reconstructs
+      into a cubic Bézier curve by fitting a model to the data)
        * `cg.cyclePaths[i].length`
        * `cg.cyclePaths[i][j].x`
        * `cg.cyclePaths[i][j].y`
