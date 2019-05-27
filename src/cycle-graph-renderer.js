@@ -1,6 +1,7 @@
 
 const { GroupRenderer } = require( './group-renderer' );
 const geom = require( './geometry' );
+const fitter = require( './fit-cubic-bezier' );
 
 // Now the cycle graph drawing class.
 // (Note that while this class can render many different formats,
@@ -98,13 +99,17 @@ class CycleGraphRenderer extends GroupRenderer {
         const lineWidth = this.get( 'lineWidth' )
                        || this.get( 'width' ) / 500;
         // Draw all paths first, beneath the nodes.  Always black.
-        this.viz.cyclePaths.map( path => {
-            for ( var i = 0 ; i < path.length - 1 ; i++ ) {
-                const from = this.ptXY( path[i] );
-                const to = this.ptXY( path[i+1] );
-                this.canvas.line( from.x, from.y, to.x, to.y )
-                           .stroke( { width : lineWidth, color : 'black' } );
-            }
+        this.viz.cyclePaths.map( ( path, index ) => {
+            const points = path.map( point => [ point.x, point.y ] );
+            const controlPoints = fitter.fit( points );
+            const cpXY = controlPoints.map( point =>
+                this.ptXY( { x : point[0], y : point[1] } ) );
+            this.canvas.path( `M${cpXY[0].x} ${cpXY[0].y} `
+                            + `C${cpXY[1].x} ${cpXY[1].y} `
+                            + ` ${cpXY[2].x} ${cpXY[2].y} `
+                            + ` ${cpXY[3].x} ${cpXY[3].y}` )
+                       .fill( 'none' )
+                       .stroke( { width : lineWidth, color : 'black' } );
         } );
         // Draw all nodes next.  Pay attention to radius and highlights.
         const r = this.get( 'radius' );

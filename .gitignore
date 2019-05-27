@@ -2,3 +2,4 @@
 svg-test.*
 src/.tmp/
 node_modules/
+src/*test*
