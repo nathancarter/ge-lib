@@ -237,7 +237,6 @@ class ThreeRenderer extends GroupRenderer {
         };
 
         // if the line is curved, figure that out now.
-        const margin = this.get( 'arrowMargins' );
         var curveFunction;
         if ( line.curved ) {
             line.offset = ( line.offset === undefined ) ? 0.2 : line.offset;
@@ -249,20 +248,39 @@ class ThreeRenderer extends GroupRenderer {
             curveFunction = t => line.from.clone().lerp( line.to, t );
         }
 
+        // compute correct margins based on actual curve shape
+        const seek = ( f, d, a, b ) => {
+            // find t in [0,1] s.t. dist(f(t),f(1)) ~ d
+            // a and b are for internal use; clients do not pass them
+            if ( typeof( a ) == 'undefined' ) {
+                // first call
+                if ( f( 0 ).distanceTo( f( 1 ) ) < d ) return 0;
+                return seek( f, d, 0, 1 );
+            }
+            // otherwise do a binary search
+            const m = ( a + b ) / 2;
+            const dist = f( m ).distanceTo( f( 1 ) );
+            return dist - d < -0.001 ? seek( f, d, a, m ) :
+                   dist - d > +0.001 ? seek( f, d, m, b ) : m;
+        }
+        const margin = this.get( 'arrowMargins' );
+        const redge = seek( curveFunction, margin );
+        const ledge = 1 - seek( t => curveFunction( 1 - t ), margin );
+
         // generate many points along the line or curve
         const step = 0.05;
-        for ( var t = margin ; t < 1-margin-step/2 ; t += step )
+        for ( var t = ledge ; t < redge-step/2 ; t += step )
             addLineSegment( curveFunction( t ), curveFunction( t+step ), line.color );
 
         // if it has no arrowhead, stop here
         if ( !line.arrowhead ) return;
 
         // ok, it has an arrowhead, so let's add that
-        const arrowT = Math.min( 1 - margin, Math.max( margin,
+        const arrowT = Math.min( redge, Math.max( ledge,
             this.get( 'arrowheadPlacement' ) ) );
         const end = curveFunction( arrowT );
         const close = curveFunction( arrowT - 0.05 );
-        const len = curveFunction( margin ).distanceTo( curveFunction( 1 - margin ) );
+        const len = curveFunction( ledge ).distanceTo( curveFunction( redge ) );
         const deriv = end.clone().sub( close )
             .normalize().multiplyScalar( len * this.get( 'arrowheadSize' ) );
         const screenEnd = this.projectVector3( end );

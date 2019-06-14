@@ -3,16 +3,14 @@
 
 ## Cayley diagrams
 
- * Bug fix: Right now you use arrowMargins as an absolute t
-   value, which means the margin varies by line/curve.  Instead,
-   do a binary search through parameter space until `curveFunction`
-   yields something very close to the specified distance (in world
-   coordinates) from its start and end points, and use those as the
-   actual starting and ending margin values.
+ * Bug fix: Arrowhead sizes are scaled according to arrow path lengths.
+   This makes some arrowheads for the same generator different sizes.  Fix.
  * Finish `CayleyDiagramRenderer`:
     * Support highlighting node backgrounds
     * Support highlighting nodes by ring
     * Support highlighting nodes by square
+ * Begin using `fitter.fit` to guarantee curves are true curves, not just
+   piecewise linear paths.
  * Complete the "Properties of Cayley Diagrams" section of the documetation.
  * To complete the API for everything you can do in GE with CDs:
     * Add to the `.md` doc how to create a named CD (and to get the
