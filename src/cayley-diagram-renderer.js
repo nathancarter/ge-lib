@@ -30,6 +30,8 @@ class CayleyDiagramRenderer extends ThreeRenderer {
                             radius, new THREE.Color( node.color ),
                             node.element );
         } );
+        if ( visualizer.isGenerated )
+            this.yzscale = -1;
     }
 }
 
