@@ -9,8 +9,6 @@ global.THREE = require( 'three' );
 const SVGDOM = require( 'svgdom' );
 global.window = new SVGDOM.Window();
 global.document = window.document;
-require( `${__dirname}/../node_modules/three/examples/js/renderers/Projector` );
-require( `${__dirname}/../node_modules/three/examples/js/renderers/SVGRenderer` );
 
 // Now the drawing class for 3D diagrams made of balls and sticks.
 // (Though many little sticks can be arranged into a piecewise linear
@@ -26,7 +24,7 @@ class ThreeRenderer extends GroupRenderer {
         this.scene = new THREE.Scene();
         this.bgcolor = new THREE.Color( 1, 1, 1 );
         this.scene.background = this.bgcolor;
-        this.renderer = new THREE.SVGRenderer();
+        // this.renderer = new THREE.SVGRenderer();
         // The following constant is used to flip the y- and z-axes so that
         // generated diagrams are treated differently than hard-coded diagrams.
         // It's a hack, sorry.  Set it to -1 for generated Cayley diagrams.
@@ -36,6 +34,9 @@ class ThreeRenderer extends GroupRenderer {
         this.set( 'lineWidth', 5 ); // must be >0
         this.set( 'nodeScale', 1 ); // must be >0
         this.set( 'arrowheadPlacement', 1 ); // range: [0,1]
+        this.set( 'arrowMargins', 0 ); // range: [0,0.5)
+        this.set( 'arrowheadSize', 0.1 ); // range: (0,1)
+        this.set( 'showNames', true ); // boolean
         // We store the list of balls and sticks in the following member
         // variables.  Subclasses can populate these with the functions given
         // immediately below.  We then use this data to populate the scene at
@@ -43,13 +44,15 @@ class ThreeRenderer extends GroupRenderer {
         this.vertices = [ ];
         this.lines = [ ];
     }
-    // To add a vertex, provide position, radius, and color:
-    addVertex ( x, y, z, r, c ) {
-        this.vertices.push( {
+    // To add a vertex, provide position, radius, color, and optional element:
+    addVertex ( x, y, z, r, c, e ) {
+        const obj = {
             pos : new THREE.Vector3( x, y, z ),
             radius : r,
             color : new THREE.Color( c )
-        } );
+        };
+        if ( typeof( e ) != 'undefined' ) obj.element = e;
+        this.vertices.push( obj );
     }
     // To clear all vertices, use this:
     clearVertices () { this.vertices = [ ]; }
@@ -72,30 +75,48 @@ class ThreeRenderer extends GroupRenderer {
         this.set( 'width', 500 );
         this.set( 'height', 500 );
     }
+    // How to project a point using the camera
+    projectPoint ( x, y, z ) {
+        return this.projectVector3( new THREE.Vector3( x, y, z ) );
+    }
+    // Alternate form of previous
+    projectVector3 ( vector3 ) {
+        var projected = new THREE.Vector4();
+        projected.copy( vector3 ).applyMatrix4( this.projectionMatrix );
+        const result = new THREE.Vector3( projected.x / projected.w,
+                                          projected.y / projected.w,
+                                          projected.z / projected.w );
+        const w = this.get( 'width' );
+        const h = this.get( 'height' );
+        result.x = result.x * w / 2 + w / 2;
+        result.y = -result.y * h / 2 + h / 2;
+        result.z = this.camera.position.distanceTo( vector3 );
+        return result;
+    }
     // The main drawing routine for 3D scenes.
     draw () {
-        // place the camera based on where they've placed scene objects
+        // // place the camera based on where they've placed scene objects
         this.placeCamera();
         const w = this.get( 'width' );
         const h = this.get( 'height' );
         this.camera.aspect = w / h;
         this.camera.zoom = this.get( 'zoomLevel' );
         this.camera.updateProjectionMatrix();
-        // delete everything in the scene
-        this.scene.children.slice().map( child => this.scene.remove( child ) );
+        // make it possible to project points to screen coordinates
+        this.camera.updateMatrixWorld();
+        this.projectionMatrix = new THREE.Matrix4();
+        this.projectionMatrix.multiplyMatrices(
+            this.camera.projectionMatrix,
+            this.camera.matrixWorldInverse );
+        // start with an empty scene
+        this.thingsToDraw = [ ];
         // let subclasses populate the scene
         this.vertices.map( v => this.addVertexToScene( v ) );
-        // slight workaround for three.js SVGRenderer bug:
-        // https://github.com/mrdoob/three.js/issues/16540
-        this.vertices.map( v => {
-            const sphere = this.addVertexToScene( v );
-            sphere.rotateX( 0.1 );
-        } );
-        // (end of workaround)
         this.lines.map( l => this.addLineToScene( l ) );
         // render the scene at the desired size using the camera
-        this.renderer.setSize( w, h );
-        this.renderer.render( this.scene, this.camera );
+        this.thingsToDraw.sort( ( thing1, thing2 ) =>
+            thing2.depth - thing1.depth );
+        this.thingsToDraw.map( thing => thing.draw() );
     }
     // Get the locations of every vertex in the scene.
     getAllVertices () {
@@ -164,70 +185,100 @@ class ThreeRenderer extends GroupRenderer {
     // Then draw() will be able to render the objects we arrange here.
     // This is abstract; subclasses should override.
     setupScene () { }
-    // Replace .svg() routine (which assumed we were working with this.canvas)
-    // with one that uses this.renderer.domElement instead:
-    svg () { return this.renderer.domElement.outerHTML; }
     // Internal-use functions to add lines to the scene:
     addVertexToScene ( vertex ) {
-        const sphere = new THREE.Mesh(
-            new THREE.SphereGeometry(
-                vertex.radius * this.get( 'nodeScale' ), 12, 12 ),
-            new THREE.MeshBasicMaterial( {
-                color : this.adjustColor( vertex.color, vertex.pos )
-            } ) );
-        sphere.translateX( vertex.pos.x )
-              .translateY( vertex.pos.y )
-              .translateZ( vertex.pos.z );
-        this.scene.add( sphere );
-        return sphere;
+        const screenPos = this.projectVector3( vertex.pos );
+        const scale = this.get( 'nodeScale' ) / screenPos.z;
+        const defaultRadius = 150;
+        const defaultStroke = 5;
+        const color = this.adjustColor( vertex.color, vertex.pos ).getHexString();
+        this.thingsToDraw.push( {
+            depth : screenPos.z,
+            draw : () => {
+                this.canvas.circle( defaultRadius * scale )
+                           .fill( '#'+color )
+                           .stroke( { color : 'black', width : defaultStroke * scale } )
+                           .move( screenPos.x - defaultRadius * scale / 2,
+                                  screenPos.y - defaultRadius * scale / 2 );
+                if ( vertex.element && this.get( 'showNames' ) )
+                    this.writeElement( vertex.element, screenPos.x, screenPos.y );
+            }
+        } );
     }
     addLineToScene( line ) {
-        // add the line itself
 
         ///
-        /// Right now this only adds straight lines.
-        /// Later we must add code taht repsects the line's style (straight/curved).
+        /// Right now this adds only straight lines.
+        /// Later we must add code that repsects the line's style (straight/curved).
         ///
 
-        var geometry = new THREE.BufferGeometry();
-        geometry.addAttribute( 'position',
-            new THREE.Float32BufferAttribute( [
-                line.from.x, line.from.y, line.from.z,
-                line.to.x, line.to.y, line.to.z
-            ], 3 ) );
-        const midpt = line.from.clone().add( line.to ).divideScalar( 2 );
-        const color = this.adjustColor( line.color, midpt );
-        this.scene.add( new THREE.Line(
-            geometry,
-            new THREE.LineBasicMaterial( {
-                color : color,
-                linewidth : this.get( 'lineWidth' )
-            } )
-        ) );
+        const defaultStroke = 2;
+        const addLineSegment = ( from, to, color ) => {
+            const midpt = line.from.clone().add( line.to ).divideScalar( 2 );
+            const colorWithFog = this.adjustColor( line.color, midpt ).getHexString();
+            const screenMidpt = this.projectVector3( midpt );
+            screenMidpt.z += 0.01; // nudge
+            const screenFrom = this.projectVector3( from );
+            const screenTo = this.projectVector3( to );
+            const scale = this.get( 'lineWidth' ) / screenMidpt.z;
+            this.thingsToDraw.push( {
+                depth : screenMidpt.z,
+                draw : () => {
+                    this.canvas.line( screenFrom.x, screenFrom.y,
+                                      screenTo.x, screenTo.y )
+                               .fill( 'none' )
+                               .stroke( { color : '#'+colorWithFog,
+                                          width : defaultStroke * scale,
+                                          linecap : 'round' } );
+                }
+            } );
+        };
+        const step = 0.05;
+        const lerp = t => line.from.clone().lerp( line.to, t );
+        const margin = this.get( 'arrowMargins' );
+        for ( var t = margin ; t < 1-margin-step/2 ; t += step )
+            addLineSegment( lerp( t ), lerp( t+step ), line.color );
+
         // if it has no arrowhead, stop here
         if ( !line.arrowhead ) return;
-        // ok, it has an arrowhead, so let's add that, imitating code from
-        // GE's updateArrowheads() in DisplayDiagram.js.
-        const nodeRadius = this.vertices[0].radius * this.get( 'nodeScale' ),
-              length = line.from.distanceTo( line.to ),
-              headLength = Math.min( nodeRadius, ( length - 2 * nodeRadius ) / 2 ),
-              headWidth = 0.6 * headLength * this.get( 'lineWidth' ) / 3,
-              arrowLength = 1.1 * headLength;
-        if ( length <= 2 * nodeRadius ) return;
-        const arrowPlace = 0.01 + ( nodeRadius
-                + ( length - 2 * nodeRadius - headLength )
-                    * this.get( 'arrowheadPlacement' )
-            ) / length;
-        const arrowDir = line.to.clone().sub( line.from ).normalize();
-        const arrowStart = new THREE.Vector3().addVectors(
-            line.from.clone().multiplyScalar( 1 - arrowPlace ),
-            line.to.clone().multiplyScalar( arrowPlace ) );
-        const arrowhead = new THREE.ArrowHelper(
-            arrowDir, arrowStart, arrowLength, color, headLength, headWidth );
-        this.scene.add( arrowhead );
+
+        // ok, it has an arrowhead, so let's add that
+        const arrowT = Math.min( 1 - margin, Math.max( margin,
+            this.get( 'arrowheadPlacement' ) ) );
+        const end = lerp( arrowT );
+        const close = lerp( arrowT - 0.05 );
+        const lineLen = lerp( margin ).distanceTo( lerp( 1 - margin ) );
+        const deriv = end.clone().sub( close )
+            .normalize().multiplyScalar( lineLen * this.get( 'arrowheadSize' ) );
+        const screenEnd = this.projectVector3( end );
+        const screenButt = this.projectVector3(
+            end.clone().add( deriv.clone().negate() ) );
+        const depth = screenEnd.z - 0.01; // nudge
+        const colorWithFog = this.adjustColor( line.color, close ).getHexString();
+        screenEnd.z = 0;
+        screenButt.z = 0;
+        const screenDir = screenEnd.clone().sub( screenButt );
+        const screenSideways = new THREE.Vector3().crossVectors(
+            screenDir, new THREE.Vector3( 0, 0, 1 ) ).divideScalar( 2 );
+        const oneSide = screenButt.clone().add( screenSideways );
+        const otherSide = screenButt.clone().sub( screenSideways );
+        const defaultLength = 4;
+        const scale = this.get( 'lineWidth' ) / depth;
+        this.thingsToDraw.push( {
+            depth : depth,
+            draw : () => {
+                this.canvas.polygon( [
+                    screenEnd.x, screenEnd.y,
+                    oneSide.x, oneSide.y,
+                    otherSide.x, otherSide.y
+                ] ).fill( '#'+colorWithFog )
+                   .stroke( { color : '#'+colorWithFog,
+                              width : defaultStroke * scale,
+                              linejoin : 'round' } );
+            }
+        } );
     }
-    // Function to adjust a color to make it seem as if the scene has fog
-    // (which THREE's SVGRenderer does not support by default):
+    // Function to adjust a color to make it seem as if the scene has fog:
     adjustColor ( original, position ) {
         const r = this.sceneRadius();
         const cameraDistance = this.camera.position.length();

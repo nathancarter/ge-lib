@@ -27,7 +27,8 @@ class CayleyDiagramRenderer extends ThreeRenderer {
                 0.3 / Math.sqrt( this.viz.nodes.length ) :
                 node.radius;
             this.addVertex( node.point.x, node.point.y, node.point.z,
-                            radius, new THREE.Color( node.color ) );
+                            radius, new THREE.Color( node.color ),
+                            node.element );
         } );
     }
 }
