@@ -3,8 +3,6 @@
 
 ## Cayley diagrams
 
- * Bug fix: Arrowhead sizes are scaled according to arrow path lengths.
-   This makes some arrowheads for the same generator different sizes.  Fix.
  * Finish `CayleyDiagramRenderer`:
     * Support highlighting node backgrounds
     * Support highlighting nodes by ring

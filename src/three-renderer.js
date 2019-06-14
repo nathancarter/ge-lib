@@ -272,17 +272,15 @@ class ThreeRenderer extends GroupRenderer {
         for ( var t = ledge ; t < redge-step/2 ; t += step )
             addLineSegment( curveFunction( t ), curveFunction( t+step ), line.color );
 
-        // if it has no arrowhead, stop here
+        // if it has an arrowhead, draw that last.
         if ( !line.arrowhead ) return;
-
-        // ok, it has an arrowhead, so let's add that
         const arrowT = Math.min( redge, Math.max( ledge,
             this.get( 'arrowheadPlacement' ) ) );
         const end = curveFunction( arrowT );
         const close = curveFunction( arrowT - 0.05 );
         const len = curveFunction( ledge ).distanceTo( curveFunction( redge ) );
         const deriv = end.clone().sub( close )
-            .normalize().multiplyScalar( len * this.get( 'arrowheadSize' ) );
+            .normalize().multiplyScalar( this.get( 'arrowheadSize' ) );
         const screenEnd = this.projectVector3( end );
         const screenButt = this.projectVector3(
             end.clone().add( deriv.clone().negate() ) );
