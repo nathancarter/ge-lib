@@ -4,7 +4,6 @@
 ## Cayley diagrams
 
  * Finish `CayleyDiagramRenderer`:
-    * Support curved lines
     * Support highlighting node backgrounds
     * Support highlighting nodes by ring
     * Support highlighting nodes by square

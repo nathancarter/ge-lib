@@ -19,7 +19,8 @@ class CayleyDiagramRenderer extends ThreeRenderer {
                               line.vertices[i+1].point.y,
                               line.vertices[i+1].point.z,
                               new THREE.Color( line.color ),
-                              arrowhead );
+                              arrowhead,
+                              line.style == 1 );
             }
         } );
         this.viz.nodes.map( node => {

@@ -57,13 +57,18 @@ class ThreeRenderer extends GroupRenderer {
     // To clear all vertices, use this:
     clearVertices () { this.vertices = [ ]; }
     // To add a line segment, provide starting and ending position, plus color,
-    // and optionally whether it has an arrowhead (defaults to false):
-    addLine ( x1, y1, z1, x2, y2, z2, c, a ) {
+    // and optionally whether it has an arrowhead (defaults to false)
+    // and optionally whether it is curved (defaults to false)
+    // and optionally curved group data for start and end points (defaults to undefined):
+    addLine ( x1, y1, z1, x2, y2, z2, c, a, cu, cg1, cg2 ) {
         this.lines.push( {
             from : new THREE.Vector3( x1, y1, z1 ),
             to : new THREE.Vector3( x2, y2, z2 ),
             color : new THREE.Color( c ),
-            arrowhead : !!a
+            arrowhead : !!a,
+            curved : !!cu,
+            group1 : cg1,
+            group2 : cg2
         } );
     }
     // To clear all lines, use this:
@@ -200,18 +205,15 @@ class ThreeRenderer extends GroupRenderer {
                            .stroke( { color : 'black', width : defaultStroke * scale } )
                            .move( screenPos.x - defaultRadius * scale / 2,
                                   screenPos.y - defaultRadius * scale / 2 );
-                if ( vertex.element && this.get( 'showNames' ) )
+                if ( typeof( vertex.element ) != 'undefined'
+                  && this.get( 'showNames' ) )
                     this.writeElement( vertex.element, screenPos.x, screenPos.y );
             }
         } );
     }
     addLineToScene( line ) {
-
-        ///
-        /// Right now this adds only straight lines.
-        /// Later we must add code that repsects the line's style (straight/curved).
-        ///
-
+        // we will break lines or curves down into tiny segments.
+        // here's the function that will add each segment to the scene.
         const defaultStroke = 2;
         const addLineSegment = ( from, to, color ) => {
             const midpt = line.from.clone().add( line.to ).divideScalar( 2 );
@@ -233,11 +235,24 @@ class ThreeRenderer extends GroupRenderer {
                 }
             } );
         };
-        const step = 0.05;
-        const lerp = t => line.from.clone().lerp( line.to, t );
+
+        // if the line is curved, figure that out now.
         const margin = this.get( 'arrowMargins' );
+        var curveFunction;
+        if ( line.curved ) {
+            line.offset = ( line.offset === undefined ) ? 0.2 : line.offset;
+            const middle = this.getControlPoint( line );
+            curveFunction = t =>
+                line.from.clone().lerp( middle, t ).lerp(
+                    middle.clone().lerp( line.to, t ), t );
+        } else {
+            curveFunction = t => line.from.clone().lerp( line.to, t );
+        }
+
+        // generate many points along the line or curve
+        const step = 0.05;
         for ( var t = margin ; t < 1-margin-step/2 ; t += step )
-            addLineSegment( lerp( t ), lerp( t+step ), line.color );
+            addLineSegment( curveFunction( t ), curveFunction( t+step ), line.color );
 
         // if it has no arrowhead, stop here
         if ( !line.arrowhead ) return;
@@ -245,11 +260,11 @@ class ThreeRenderer extends GroupRenderer {
         // ok, it has an arrowhead, so let's add that
         const arrowT = Math.min( 1 - margin, Math.max( margin,
             this.get( 'arrowheadPlacement' ) ) );
-        const end = lerp( arrowT );
-        const close = lerp( arrowT - 0.05 );
-        const lineLen = lerp( margin ).distanceTo( lerp( 1 - margin ) );
+        const end = curveFunction( arrowT );
+        const close = curveFunction( arrowT - 0.05 );
+        const len = curveFunction( margin ).distanceTo( curveFunction( 1 - margin ) );
         const deriv = end.clone().sub( close )
-            .normalize().multiplyScalar( lineLen * this.get( 'arrowheadSize' ) );
+            .normalize().multiplyScalar( len * this.get( 'arrowheadSize' ) );
         const screenEnd = this.projectVector3( end );
         const screenButt = this.projectVector3(
             end.clone().add( deriv.clone().negate() ) );
@@ -295,6 +310,61 @@ class ThreeRenderer extends GroupRenderer {
             ( 1 - p ) * original.r + p * fogColor.r,
             ( 1 - p ) * original.g + p * fogColor.g,
             ( 1 - p ) * original.b + p * fogColor.b );
+    }
+    // Function to figure out how to make a line that needs to be curved
+    // between two nodes in a Cayley Diagram curve appropriately, by
+    // computing the middle control point for a quadratic Bézier curve:
+    getControlPoint ( line ) {
+        const startPoint = line.from,
+              endPoint = line.to,
+              center = this.getCenterOfCurvature( line ),
+              start = startPoint.clone().sub( center ),
+              end = endPoint.clone().sub( center ),
+              offsetDistance = line.offset * startPoint.distanceTo( endPoint ),
+              halfway = new THREE.Vector3().addVectors( start, end ).multiplyScalar( 0.5 ),
+              start2end = end.clone().sub( start ),
+              x = -start.dot( start2end ) / end.dot( start2end ), // start + x*end is normal to start - end
+              normal = ( ( end.dot( start2end ) == 0 ) ? end.clone() :
+                           start.clone().add( end.clone().multiplyScalar( x ) ) ).normalize(),
+              offset = normal.clone().multiplyScalar( 2 * offsetDistance ),
+              middle = center.clone().add( halfway ).add( offset );
+        return line.middle = middle;
+    }
+    // Utility function used by the previous:
+    getCenterOfCurvature ( line ) {
+        const startPoint = line.from,
+              endPoint = line.to;
+        const centerOK = point =>
+            new THREE.Vector3().crossVectors( startPoint.clone().sub( point ),
+                                              endPoint.clone().sub( point ) )
+                               .lengthSq() > 1.e-4;
+
+        // if center is spec'd, check it and if OK, return that
+        if ( line.center !== undefined && centerOK( line.center ) )
+            return line.center;
+
+        // if nodes are in the same curved group, find avg of nodes and use that as the center
+        if ( line.group1 !== undefined
+          && line.group1 == line.group2 ) {
+            line.center = line.group1
+                              .reduce( ( center, node ) =>
+                                           center.add( node.point ), new THREE.Vector3() )
+                              .multiplyScalar( 1 / line.group1.length );
+            if ( centerOK( line.center ) ) return line.center;
+        }
+
+        // if center not spec'd, or not OK, try (0,0,0); if that's OK, return that
+        line.center = new THREE.Vector3( 0, 0, 0 );
+        if ( centerOK( line.center ) ) return line.center;
+
+        // if (0,0,0)'s not OK, form (camera, start, end) plane, get unit normal
+        line.center = new THREE.Vector3().crossVectors(
+            this.camera.position.clone().sub( startPoint ),
+            endPoint.clone().sub( startPoint )
+        ).normalize().add( startPoint.clone().add( endPoint ).multiplyScalar( 0.5 ) );
+        if ( centerOK( line.center ) ) return line.center;
+
+        throw "Can't find center for line curve!"
     }
 }
 
