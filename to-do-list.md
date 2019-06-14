@@ -3,6 +3,12 @@
 
 ## Cayley diagrams
 
+ * Bug fix: Right now you use arrowMargins as an absolute t
+   value, which means the margin varies by line/curve.  Instead,
+   do a binary search through parameter space until `curveFunction`
+   yields something very close to the specified distance (in world
+   coordinates) from its start and end points, and use those as the
+   actual starting and ending margin values.
  * Finish `CayleyDiagramRenderer`:
     * Support highlighting node backgrounds
     * Support highlighting nodes by ring
