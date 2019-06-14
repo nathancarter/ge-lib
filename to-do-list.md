@@ -3,11 +3,8 @@
 
 ## Cayley diagrams
 
- * Finish `CycleDiagramRenderer`:
+ * Finish `CayleyDiagramRenderer`:
     * Support curved lines
-    * Consider replacing spheres with disc billboards before you proceed
-      with any of the rest of this stuff
-    * Add labels
     * Support highlighting node backgrounds
     * Support highlighting nodes by ring
     * Support highlighting nodes by square
@@ -42,7 +39,6 @@ cayleyDiagram.setLineColors();
    to do so in a way that is re-usabale for symmetry objects later.
 ```js
 cayleyDiagram.labelSize
-cayleyDiagram.arrowheadPlacement
 cayleyDiagram.arrowColors
 ```
 
