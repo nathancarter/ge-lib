@@ -88,7 +88,6 @@ class GroupRenderer {
     // Write the representation of an element centered on a given
     // point on the canvas.
     writeElement ( a, x, y ) {
-        const scale = this.get( 'fontScale' ) || 1.0;
         const size = this.representationSize( a );
         const name = this.representation( a );
         return this.canvas.insertSVG( name )
