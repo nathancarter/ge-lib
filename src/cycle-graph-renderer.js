@@ -47,7 +47,7 @@ class CycleGraphRenderer extends GroupRenderer {
             const dims = this.representationSize( a );
             return Math.max( dims.w, dims.h );
         } ).reduce( ( a, b ) => Math.max( a, b ) ) * 0.55;
-        // 0.6 because circle diameter = 1.2 * name size, for margin
+        // 0.55, because circle diameter = 1.1 * name size
     }
     // Expand the margins to be just bigger than the current radius.
     setMarginsFromRadius () {
