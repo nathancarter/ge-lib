@@ -7,8 +7,6 @@
     * Support highlighting node backgrounds
     * Support highlighting nodes by ring
     * Support highlighting nodes by square
- * Begin using `fitter.fit` to guarantee curves are true curves, not just
-   piecewise linear paths.
  * Complete the "Properties of Cayley Diagrams" section of the documetation.
  * To complete the API for everything you can do in GE with CDs:
     * Add to the `.md` doc how to create a named CD (and to get the

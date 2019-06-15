@@ -3,6 +3,7 @@
 // such as Symmetry Objects and Cayley Diagrams.
 
 const { GroupRenderer } = require( './group-renderer' );
+const fitter = require( './fit-cubic-bezier' );
 
 // Tools unique to 3D rendering
 global.THREE = require( 'three' );
@@ -213,21 +214,45 @@ class ThreeRenderer extends GroupRenderer {
     }
     addLineToScene( line ) {
         // we will break lines or curves down into tiny segments.
-        // here's the function that will add each segment to the scene.
+        // here are functions that will add each segment to the scene.
         const defaultStroke = 2;
         const addLineSegment = ( from, to, color ) => {
             const midpt = line.from.clone().add( line.to ).divideScalar( 2 );
             const colorWithFog = this.adjustColor( line.color, midpt ).getHexString();
             const screenMidpt = this.projectVector3( midpt );
             screenMidpt.z += 0.01; // nudge
+            const scale = this.get( 'lineWidth' ) / screenMidpt.z;
             const screenFrom = this.projectVector3( from );
             const screenTo = this.projectVector3( to );
-            const scale = this.get( 'lineWidth' ) / screenMidpt.z;
             this.thingsToDraw.push( {
                 depth : screenMidpt.z,
                 draw : () => {
                     this.canvas.line( screenFrom.x, screenFrom.y,
                                       screenTo.x, screenTo.y )
+                               .fill( 'none' )
+                               .stroke( { color : '#'+colorWithFog,
+                                          width : defaultStroke * scale,
+                                          linecap : 'round' } );
+                }
+            } );
+        };
+        const addCubicBezierSegment = ( points, color ) => {
+            const midpt = points[Math.floor( points.length / 2 )];
+            const colorWithFog = this.adjustColor( line.color, midpt ).getHexString();
+            const screenMidpt = this.projectVector3( midpt );
+            screenMidpt.z += 0.01; // nudge
+            const scale = this.get( 'lineWidth' ) / screenMidpt.z;
+            const screenPoints = points.map( pt => this.projectVector3( pt ) )
+                                       .map( pt => [ pt.x, pt.y ] );
+            const C = fitter.fit( screenPoints );
+            const path = `M${C[0][0]} ${C[0][1]} `
+                       + `C${C[1][0]} ${C[1][1]} `
+                       + ` ${C[2][0]} ${C[2][1]} `
+                       + ` ${C[3][0]} ${C[3][1]}`;
+            this.thingsToDraw.push( {
+                depth : screenMidpt.z,
+                draw : () => {
+                    this.canvas.path( path )
                                .fill( 'none' )
                                .stroke( { color : '#'+colorWithFog,
                                           width : defaultStroke * scale,
@@ -266,11 +291,38 @@ class ThreeRenderer extends GroupRenderer {
         const margin = this.get( 'arrowMargins' );
         const redge = seek( curveFunction, margin );
         const ledge = 1 - seek( t => curveFunction( 1 - t ), margin );
+        const curvePoints = ( mint, maxt, steps ) => {
+            var result = [ ];
+            const dt = ( maxt - mint ) / steps;
+            for ( var t = mint ; t < maxt+dt/2 ; t += dt )
+                result.push( curveFunction( t ) );
+            return result;
+        }
 
-        // generate many points along the line or curve
-        const step = 0.05;
-        for ( var t = ledge ; t < redge-step/2 ; t += step )
-            addLineSegment( curveFunction( t ), curveFunction( t+step ), line.color );
+        // generate many points along the line or curve...
+        // add the line or curve to the scene, in one of two ways
+        if ( this.get( 'fogLevel' ) == 0 ) {
+            // there is no fog, so we can do a single line/curve piece
+            if ( line.curved ) {
+                addCubicBezierSegment( curvePoints( ledge, redge, 7 ),
+                                       line.color );
+            } else {
+                addLineSegment( curveFunction( ledge ), curveFunction( redge ),
+                                line.color );
+            }
+        } else {
+            // there is some fog, so we must do many little pieces
+            if ( line.curved ) {
+                for ( var t = ledge ; t < redge-step/2 ; t += step )
+                    addCubicBezierSegment( curvePoints( ledge, redge, 7 ),
+                                           line.color );
+            } else {
+                const step = 0.05;
+                for ( var t = ledge ; t < redge-step/2 ; t += step )
+                    addLineSegment( curveFunction( t ), curveFunction( t+step ),
+                                    line.color );
+            }
+        }
 
         // if it has an arrowhead, draw that last.
         if ( !line.arrowhead ) return;
