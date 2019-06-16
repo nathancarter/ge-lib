@@ -96,6 +96,33 @@ const usage = () => console.log(
   + '      nodes of a diagram as a margin, so that arrows between\n'
   + '      nodes do not obscure nodes or their element names.\n'
   + '      Positive floating point values only.  Default: 0.05.\n'
+  + '  - highlight-background\n'
+  + '      In multiplication tables and cycle graphs, this can\n'
+  + '      add highlighting to the background of a cell/vertex.\n'
+  + '      Acceptable values include:\n'
+  + '       - Any subset of the group\'s elements, as a JSON array,\n'
+  + '         such as [3,4,6].\n'
+  + '       - Any partition of the group\'s elements or a subset\n'
+  + '         thereof, as a JSON array, such as [[0,1],[4,5],[8]].\n'
+  + '  - highlight-border\n'
+  + '      In multiplication tables and cycle graphs, this is just\n'
+  + '      like highlight-background, but works on cell/vertex\n'
+  + '      borders instead.\n'
+  + '  - highlight-corner\n'
+  + '      In multiplication tables, this is just like\n'
+  + '      highlight-background, but works on cell corners instead.\n'
+  + '  - highlight-top\n'
+  + '      In cycle graphs, this is just like\n'
+  + '      highlight-background, but works on vertex tops instead.\n'
+  + '  - highlight-node\n'
+  + '      In Cayley diagrams, this is just like\n'
+  + '      highlight-background does in multiplication tables.\n'
+  + '  - highlight-ring\n'
+  + '      In Cayley diagrams, this is just like highlight-node,\n'
+  + '      but creates a colored ring around the node instead.\n'
+  + '  - highlight-square\n'
+  + '      In Cayley diagrams, this is just like highlight-node,\n'
+  + '      but creates a colored square around the node instead.\n'
 );
 
 // fetch command line arguments
@@ -180,7 +207,10 @@ const validOptionKeys = [
     'outfile', 'cameraPos', 'cameraUp', 'zoomLevel', 'lineWidth',
     'nodeScale', 'fogLevel', 'separation', 'stride', 'elements',
     'coloration', 'arrows', 'arrowColors', 'arrowheadPlacement',
-    'showNames', 'arrowMargins'
+    'showNames', 'arrowMargins',
+    'highlight-background', 'highlight-border', 'highlight-corner',
+    'highlight-top', 'highlight-node', 'highlight-ring',
+    'highlight-square'
 ];
 rest.map( arg => {
     const halves = arg.split( '=' );
@@ -355,6 +385,50 @@ if ( vizClassName == 'CayleyDiagram' && options.hasOwnProperty( 'arrowMargins' )
     }
     renderer.set( 'arrowMargins', m );
 }
+// highlighting
+const getHighlightingPartition = key => {
+    var arr = JSON.parse( options[key] );
+    if ( !( arr instanceof Array ) ) {
+        console.error( `${key} must be an array:`, options[key] );
+        process.exit( 1 );
+    }
+    if ( !( arr[0] instanceof Array ) ) arr = [ arr ];
+    if ( arr.some( inner =>
+            inner.some( elt => group.elements.indexOf( elt ) == -1 ) ) ) {
+        console.error( `${key} must contain only group elements:`,
+            options[key] );
+        process.exit( 1 );
+    }
+    return arr;
+}
+if ( ( vizClassName == 'Multtable' || vizClassName == 'CycleGraph' )
+  && options.hasOwnProperty( 'highlight-background' ) )
+    viz.highlightByBackground(
+        getHighlightingPartition( 'highlight-background' ) );
+if ( ( vizClassName == 'Multtable' || vizClassName == 'CycleGraph' )
+  && options.hasOwnProperty( 'highlight-border' ) )
+    viz.highlightByBorder(
+        getHighlightingPartition( 'highlight-border' ) );
+if ( vizClassName == 'Multtable'
+  && options.hasOwnProperty( 'highlight-corner' ) )
+    viz.highlightByCorner(
+        getHighlightingPartition( 'highlight-corner' ) );
+if ( vizClassName == 'CycleGraph'
+  && options.hasOwnProperty( 'highlight-top' ) )
+    viz.highlightByTop(
+        getHighlightingPartition( 'highlight-top' ) );
+if ( vizClassName == 'CayleyDiagram'
+  && options.hasOwnProperty( 'highlight-node' ) )
+    viz.highlightByNodeColor(
+        getHighlightingPartition( 'highlight-node' ) );
+if ( vizClassName == 'CayleyDiagram'
+  && options.hasOwnProperty( 'highlight-ring' ) )
+    viz.highlightByRingAroundNode(
+        getHighlightingPartition( 'highlight-ring' ) );
+if ( vizClassName == 'CayleyDiagram'
+  && options.hasOwnProperty( 'highlight-square' ) )
+    viz.highlightBySquareAroundNode(
+        getHighlightingPartition( 'highlight-square' ) );
 
 // render the group they requested to the file they requested
 try {

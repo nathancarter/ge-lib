@@ -6,15 +6,7 @@
  * Add the following options/new signatures, adding help for each as
    you create the feature.
     * `ge-draw <group> <viz> --highlight-<type>=<n>`: Highlight
-      subgroup #n with the given highlighting type.  Can be
-      accompanied by `--highlight-color=<color>`, in any reasonable
-      format.
-    * `ge-draw <group> <viz> --highlight-<type>=<json>`: Highlight
-      subset with the given elements, using the given highlighting
-      type.  The JSON must be an array of element indices or an array
-      of strings, element representations.  Support `--highlight-color`.
-    * Extend the previous to support an array of arrays partitioning
-      the group.
+      subgroup #n with the given highlighting type.
     * `ge-draw <group> <viz> --highlight-<type>=<C>`: Where C is any
       reasonable initial segment of the phrase "conjugacy classes",
       highlight the conjugacy classes partition.
