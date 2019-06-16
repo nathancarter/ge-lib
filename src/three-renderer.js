@@ -45,12 +45,14 @@ class ThreeRenderer extends GroupRenderer {
         this.vertices = [ ];
         this.lines = [ ];
     }
-    // To add a vertex, provide position, radius, color, and optional element:
-    addVertex ( x, y, z, r, c, e ) {
+    // To add a vertex, provide position, radius, color, and optional element
+    // and highlight data:
+    addVertex ( x, y, z, r, c, e, h ) {
         const obj = {
             pos : new THREE.Vector3( x, y, z ),
             radius : r,
-            color : new THREE.Color( c )
+            color : new THREE.Color( c ),
+            highlights : h
         };
         if ( typeof( e ) != 'undefined' ) obj.element = e;
         this.vertices.push( obj );
@@ -195,20 +197,47 @@ class ThreeRenderer extends GroupRenderer {
     addVertexToScene ( vertex ) {
         const screenPos = this.projectVector3( vertex.pos );
         const scale = this.get( 'nodeScale' ) / screenPos.z;
-        const defaultRadius = 150;
+        const defaultRadius = 75;
         const defaultStroke = 5;
-        const color = this.adjustColor( vertex.color, vertex.pos ).getHexString();
+        const ringScale = 1.2 * scale;
+        const squareScale = 1.3 * scale;
+        const color = '#' + this.adjustColor(
+            vertex.highlights && vertex.highlights.background ?
+                new THREE.Color( vertex.highlights.background ) :
+                vertex.color,
+            vertex.pos ).getHexString();
         this.thingsToDraw.push( {
             depth : screenPos.z,
             draw : () => {
-                this.canvas.circle( defaultRadius * scale )
-                           .fill( '#'+color )
+                this.canvas.circle( defaultRadius * 2 * scale )
+                           .fill( color )
                            .stroke( { color : 'black', width : defaultStroke * scale } )
-                           .move( screenPos.x - defaultRadius * scale / 2,
-                                  screenPos.y - defaultRadius * scale / 2 );
+                           .move( screenPos.x - defaultRadius * scale,
+                                  screenPos.y - defaultRadius * scale );
                 if ( typeof( vertex.element ) != 'undefined'
                   && this.get( 'showNames' ) )
                     this.writeElement( vertex.element, screenPos.x, screenPos.y );
+                if ( vertex.highlights && vertex.highlights.ring ) {
+                    const ringc = '#' + this.adjustColor( new THREE.Color(
+                        vertex.highlights.ring ), vertex.pos ).getHexString();
+                    this.canvas.circle( defaultRadius * 2 * ringScale )
+                               .fill( 'none' )
+                               .stroke( { color : ringc,
+                                          width : defaultStroke * 3 * scale } )
+                               .move( screenPos.x - defaultRadius * ringScale,
+                                      screenPos.y - defaultRadius * ringScale );
+                }
+                if ( vertex.highlights && vertex.highlights.square ) {
+                    const squarec = '#' + this.adjustColor( new THREE.Color(
+                        vertex.highlights.square ), vertex.pos ).getHexString();
+                    this.canvas.rect( defaultRadius * 2 * squareScale,
+                                      defaultRadius * 2 * squareScale )
+                               .fill( 'none' )
+                               .stroke( { color : squarec,
+                                          width : defaultStroke * 3 * scale } )
+                               .move( screenPos.x - defaultRadius * squareScale,
+                                      screenPos.y - defaultRadius * squareScale );
+                }
             }
         } );
     }

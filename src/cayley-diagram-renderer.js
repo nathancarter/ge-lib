@@ -8,6 +8,16 @@ const { ThreeRenderer } = require( './three-renderer' );
 class CayleyDiagramRenderer extends ThreeRenderer {
     constructor ( visualizer ) {
         super( visualizer );
+    }
+    setupSizeForSVG ( callback ) {
+        this.setup();
+        super.setupSizeForSVG( callback );
+    }
+    setupSizeForPDF ( callback ) {
+        this.setup();
+        super.setupSizeForSVG( callback );
+    }
+    setup () {
         this.viz.lines.map( line => {
             for ( var i = 0 ; i < line.vertices.length - 1 ; i++ ) {
                 const arrowhead = line.arrowhead
@@ -27,11 +37,18 @@ class CayleyDiagramRenderer extends ThreeRenderer {
             const radius = node.radius === undefined ?
                 0.3 / Math.sqrt( this.viz.nodes.length ) :
                 node.radius;
+            const brighten = color =>
+                typeof( color ) == 'undefined' ? undefined :
+                color.replace( '53%, 30%', '100%, 80%' );
             this.addVertex( node.point.x, node.point.y, node.point.z,
-                            radius, new THREE.Color( node.color ),
-                            node.element );
+                            radius, new THREE.Color( '#cccccc' ),
+                            node.element, {
+                                background : brighten( node.colorHighlight ),
+                                ring : brighten( node.ringHighlight ),
+                                square : brighten( node.squareHighlight )
+                            } );
         } );
-        if ( visualizer.isGenerated )
+        if ( this.viz.isGenerated )
             this.yzscale = -1;
     }
 }
