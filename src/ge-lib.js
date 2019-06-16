@@ -2700,7 +2700,7 @@ class Diagram3D {
    }
 
    highlightByNodeColor(elements) {
-      this._setNodeField('colorHighlight', group.elements, undefined);
+      this._setNodeField('colorHighlight', this.group.elements, undefined);
       elements.forEach( (els, colorIndex) => {
          const hue = 360 * colorIndex / elements.length;
          const color = `hsl(${hue}, 53%, 30%)`;
@@ -2710,7 +2710,7 @@ class Diagram3D {
    }
 
    highlightByRingAroundNode(elements) {
-      this._setNodeField('ringHighlight', group.elements, undefined);
+      this._setNodeField('ringHighlight', this.group.elements, undefined);
       if (elements.length == 1) {
          this._setNodeField('ringHighlight', elements[0], 'hsl(120, 53%, 30%)');
       } else {
@@ -2724,7 +2724,7 @@ class Diagram3D {
    }
 
    highlightBySquareAroundNode(elements) {
-      this._setNodeField('squareHighlight', group.elements, undefined);
+      this._setNodeField('squareHighlight', this.group.elements, undefined);
       if (elements.length == 1) {
          this._setNodeField('squareHighlight', elements[0], 'hsl(240, 53%, 30%)');
       } else {
@@ -2738,9 +2738,9 @@ class Diagram3D {
    }
 
    clearHighlights() {
-      this._setNodeField('colorHighlight', group.elements, undefined);
-      this._setNodeField('ringHighlight', group.elements, undefined);
-      this._setNodeField('squareHighlight', group.elements, undefined);
+      this._setNodeField('colorHighlight', this.group.elements, undefined);
+      this._setNodeField('ringHighlight', this.group.elements, undefined);
+      this._setNodeField('squareHighlight', this.group.elements, undefined);
       if ( this.emitStateChange ) this.emitStateChange();
    }
 }
