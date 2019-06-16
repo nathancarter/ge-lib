@@ -10,10 +10,7 @@
 
 ## Command-line interface
 
- * Create a `ge-draw` command line application that gets run by
-   `npm run` and sits in the `bin` folder when you install from npm.
-   Make its signature like `ge-draw <group> <visualizer> [options]`,
-   with one option at first, the output file name, from which the
+ * Add one option, the output file name, from which the
    file type is discerned (SVG/PDF/PNG).
  * Add `ge-draw --help` that prints a help message.
  * Add all options of the form `--x=y`, resulting in a call to
