@@ -33,6 +33,7 @@ class ThreeRenderer extends GroupRenderer {
         this.set( 'arrowMargins', 0 ); // range: [0,0.5)
         this.set( 'arrowheadSize', 0.1 ); // range: (0,1)
         this.set( 'showNames', true ); // boolean
+        this.set( 'brightHighlights', 0 ); // range: [0,1]==[none,max]
         // We store the list of balls and sticks in the following member
         // variables.  Subclasses can populate these with the functions given
         // immediately below.  We then use this data to populate the scene at
@@ -196,11 +197,23 @@ class ThreeRenderer extends GroupRenderer {
         const defaultStroke = 5;
         const ringScale = 1.2 * scale;
         const squareScale = 1.3 * scale;
-        const color = '#' + this.adjustColor(
-            vertex.highlights && vertex.highlights.background ?
-                new THREE.Color( vertex.highlights.background ) :
-                vertex.color,
-            vertex.pos ).getHexString();
+        const getHL = ( name, defaultColor ) => {
+            var result;
+            if ( vertex.highlights && vertex.highlights[name] ) {
+                result = new THREE.Color( vertex.highlights[name] );
+                var hsl = { };
+                result.getHSL( hsl );
+                hsl.h = Math.floor( 360 * hsl.h );
+                const pure = new THREE.Color( `hsl( ${hsl.h}, 100%, 100% )` );
+                result.lerpHSL( pure, this.get( 'brightHighlights' ) );
+            } else {
+                result = defaultColor;
+            }
+            if ( !result ) return result;
+            result = this.adjustColor( result, vertex.pos );
+            return '#' + result.getHexString();
+        }
+        const color = getHL( 'background', vertex.color );
         this.thingsToDraw.push( {
             depth : screenPos.z,
             draw : () => {
@@ -212,19 +225,16 @@ class ThreeRenderer extends GroupRenderer {
                 if ( typeof( vertex.element ) != 'undefined'
                   && this.get( 'showNames' ) )
                     this.writeElement( vertex.element, screenPos.x, screenPos.y );
-                if ( vertex.highlights && vertex.highlights.ring ) {
-                    const ringc = '#' + this.adjustColor( new THREE.Color(
-                        vertex.highlights.ring ), vertex.pos ).getHexString();
+                const ringc = getHL( 'ring' );
+                if ( ringc )
                     this.canvas.circle( defaultRadius * 2 * ringScale )
                                .fill( 'none' )
                                .stroke( { color : ringc,
                                           width : defaultStroke * 3 * scale } )
                                .move( screenPos.x - defaultRadius * ringScale,
                                       screenPos.y - defaultRadius * ringScale );
-                }
-                if ( vertex.highlights && vertex.highlights.square ) {
-                    const squarec = '#' + this.adjustColor( new THREE.Color(
-                        vertex.highlights.square ), vertex.pos ).getHexString();
+                const squarec = getHL( 'square' );
+                if ( vertex.highlights && vertex.highlights.square )
                     this.canvas.rect( defaultRadius * 2 * squareScale,
                                       defaultRadius * 2 * squareScale )
                                .fill( 'none' )
@@ -232,7 +242,6 @@ class ThreeRenderer extends GroupRenderer {
                                           width : defaultStroke * 3 * scale } )
                                .move( screenPos.x - defaultRadius * squareScale,
                                       screenPos.y - defaultRadius * squareScale );
-                }
             }
         } );
     }

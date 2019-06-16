@@ -37,15 +37,12 @@ class CayleyDiagramRenderer extends ThreeRenderer {
             const radius = node.radius === undefined ?
                 0.3 / Math.sqrt( this.viz.nodes.length ) :
                 node.radius;
-            const brighten = color =>
-                typeof( color ) == 'undefined' ? undefined :
-                color.replace( '53%, 30%', '100%, 80%' );
             this.addVertex( node.point.x, node.point.y, node.point.z,
                             radius, new THREE.Color( '#cccccc' ),
                             node.element, {
-                                background : brighten( node.colorHighlight ),
-                                ring : brighten( node.ringHighlight ),
-                                square : brighten( node.squareHighlight )
+                                background : node.colorHighlight,
+                                ring : node.ringHighlight,
+                                square : node.squareHighlight
                             } );
         } );
         if ( this.viz.isGenerated )
