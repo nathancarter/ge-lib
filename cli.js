@@ -143,6 +143,14 @@ const usage = () => console.log(
   + '      In a Cayley diagram without fog, some highlights can be\n'
   + '      too dark.  Use this value (in the interval [0,1], with\n'
   + '      default 0) to brighten them if necessary, to taste.\n'
+  + '  - diagram\n'
+  + '      Choose a Cayley diagram by name.  To see which names\n'
+  + '      are valid, see the usage "npm run ge-draw <group> list"\n'
+  + '      documented above.\n'
+  + '  - object\n'
+  + '      Choose a symmetry object by name.  To see which names\n'
+  + '      are valid, see the usage "npm run ge-draw <group> list"\n'
+  + '      documented above.\n'
 );
 
 // fetch command line arguments
@@ -213,13 +221,8 @@ if ( !type ) {
     process.exit( 1 );
 }
 const vizClassName = type[0];
-const viz = new GE[vizClassName]( group );
+var viz = new GE[vizClassName]( group );
 console.log( 'Created visualizer:', vizClassName );
-
-// create a renderer for the visualization they requested
-const rendererTypeName = vizClassName + 'Renderer';
-const renderer = new GE[rendererTypeName]( viz );
-console.log( 'Created renderer:', rendererTypeName );
 
 // grab all other command-line options and stick them in a dictionary
 var options = { };
@@ -230,7 +233,7 @@ const validOptionKeys = [
     'showNames', 'arrowMargins',
     'highlight-background', 'highlight-border', 'highlight-corner',
     'highlight-top', 'highlight-node', 'highlight-ring',
-    'highlight-square', 'brighten'
+    'highlight-square', 'brighten', 'diagram', 'object'
 ];
 rest.map( arg => {
     const halves = arg.split( '=' );
@@ -244,6 +247,29 @@ rest.map( arg => {
     }
     options[halves[0]] = halves[1];
 } );
+
+// before any other options happen, if they specified a diagram by name,
+// throw out the old one and replace it with the named one.
+if ( vizClassName == 'CayleyDiagram' && options.hasOwnProperty( 'diagram' ) ) {
+    if ( !group.cayleyDiagrams.some( d => d.name == options.diagram ) ) {
+        console.error( 'No such diagram:', options.diagram );
+        process.exit( 1 );
+    }
+    viz = new GE.CayleyDiagram( group, options.diagram );
+}
+// same thing for symmetry objects
+if ( vizClassName == 'SymmetryObject' && options.hasOwnProperty( 'object' ) ) {
+    if ( !group.symmetryObjects.some( d => d.name == options.object ) ) {
+        console.error( 'No such symmetry object:', options.object );
+        process.exit( 1 );
+    }
+    viz = new GE.SymmetyObject( group, options.object );
+}
+
+// create a renderer for the visualization they requested
+const rendererTypeName = vizClassName + 'Renderer';
+const renderer = new GE[rendererTypeName]( viz );
+console.log( 'Created renderer:', rendererTypeName );
 
 // fill in option defaults
 if ( !options.hasOwnProperty( 'outfile' ) )
