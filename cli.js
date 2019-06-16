@@ -139,6 +139,10 @@ const usage = () => console.log(
   + '  - highlight-square\n'
   + '      In Cayley diagrams, this is just like highlight-node,\n'
   + '      but creates a colored square around the node instead.\n'
+  + '  - brighten\n'
+  + '      In a Cayley diagram without fog, some highlights can be\n'
+  + '      too dark.  Use this value (in the interval [0,1], with\n'
+  + '      default 0) to brighten them if necessary, to taste.\n'
 );
 
 // fetch command line arguments
@@ -226,7 +230,7 @@ const validOptionKeys = [
     'showNames', 'arrowMargins',
     'highlight-background', 'highlight-border', 'highlight-corner',
     'highlight-top', 'highlight-node', 'highlight-ring',
-    'highlight-square'
+    'highlight-square', 'brighten'
 ];
 rest.map( arg => {
     const halves = arg.split( '=' );
@@ -400,6 +404,15 @@ if ( vizClassName == 'CayleyDiagram' && options.hasOwnProperty( 'arrowMargins' )
         process.exit( 1 );
     }
     renderer.set( 'arrowMargins', m );
+}
+// brighten
+if ( vizClassName == 'CayleyDiagram' && options.hasOwnProperty( 'brighten' ) ) {
+    const b = JSON.parse( options.brighten );
+    if ( typeof( b ) != 'number' || b < 0 || b > 1 ) {
+        console.error( 'Invalid brightening value:', options.brighten );
+        process.exit( 1 );
+    }
+    renderer.set( 'brightHighlights', b );
 }
 // highlighting
 const getHighlightingPartition = key => {
