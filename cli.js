@@ -111,6 +111,11 @@ const usage = () => console.log(
   + '         subgroups of the group, 0,1,...,k-1, for k subgroups.\n'
   + '         For a list of subgroups, see the usage\n'
   + '         "npm run ge-draw <group> list" documented above.\n'
+  + '       - If k is an index into the list of subgroups as above,\n'
+  + '         and c is "right" or any reasonable initial segment,\n'
+  + '         then c-k highlights by the partition of the group by\n'
+  + '         the right cosets of subroup k.\n'
+  + '       - Same as previous, but "left" for left cosets.\n'
   + '       - Any reasonable initial substring of "conjugacy classes"\n'
   + '         will highlight the group by its conjugacy classes\n'
   + '         partition.\n'
@@ -413,6 +418,17 @@ const getHighlightingPartition = key => {
     // support highlighting by order classes:
     if ( simpler == 'orderclasses'.substring( 0, simpler.length ) )
         return group.orderClasses.map( c => c.toArray() );
+    // support highlighting by cosets of a subgroup:
+    var match = /^(r|ri|rig|righ|right|l|le|lef|left)-([0-9]+)$/.exec( simpler );
+    if ( match ) {
+        const index = parseInt( match[2] );
+        if ( index >= group.subgroups.length ) {
+            console.error( 'Invalid subgroup index:', index );
+            process.exit( 1 );
+        }
+        return group.getCosets( group.subgroups[index].members,
+                                match[1][0] == 'l' ).map( c => c.toArray() );
+    }
     // support raw JSON of subsets or partial partitions:
     var arr = JSON.parse( options[key] );
     if ( !( arr instanceof Array ) ) {
