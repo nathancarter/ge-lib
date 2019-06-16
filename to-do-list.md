@@ -6,7 +6,6 @@
  * Add features to the `CayleyDiagramRenderer` class that support the
    following features that we support in 3D diagrams in GE.
 ```js
-cayleyDiagram.labelSize
 cayleyDiagram.arrowColors
 ```
  * Support chunking, or document that you don't yet support it.
