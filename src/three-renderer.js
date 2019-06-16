@@ -388,12 +388,12 @@ class ThreeRenderer extends GroupRenderer {
             }
         } else {
             // there is some fog, so we must do many little pieces
+            const step = 0.05;
             if ( line.curved || line.offset > 0 ) {
                 for ( var t = ledge ; t < redge-step/2 ; t += step )
                     addCubicBezierSegment( curvePoints( ledge, redge, 7 ),
                                            line.color );
             } else {
-                const step = 0.05;
                 for ( var t = ledge ; t < redge-step/2 ; t += step )
                     addLineSegment( curveFunction( t ), curveFunction( t+step ),
                                     line.color );
