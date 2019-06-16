@@ -40,7 +40,7 @@ For the command-line interface:
 
 For the node.js module:
  * [Basic API for this module](docs/basic-api.md)
- * [Drawing Cayley diagrams](docs/drawing-symmetry-objects.md)
+ * [Drawing Cayley diagrams](docs/drawing-cayley-diagrams.md)
  * [Drawing multiplication tables](docs/drawing-multiplication-tables.md)
  * [Drawing cycle graphs](docs/drawing-cycle-graphs.md)
  * [Drawing symmetry objects](docs/drawing-symmetry-objects.md)
