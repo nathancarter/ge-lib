@@ -44,6 +44,23 @@ Or just use the first one (as long as there is at least one):
 const cd = new GE.CayleyDiagram( A_4, A_4.cayleyDiagrams[0].name );
 ```
 
+## Optional highlighting
+
+You can highlight group elements or partitions in Cayley diagrams in
+exactly the same way that you can highlight them in cycle graphs.  We do not
+repeat the documentation here; see [the relevant portion of the cycle graph
+documentation](drawing-cycle-graphs.md#optional-highlighting).
+
+The only difference is that Cayley diagrams permit highlighting by
+rings or squares around nodes rather than borders and corners; these are
+the relevant three functions.
+
+```js
+mt.highlightByNodeColor( partition ); // or [ subset ]
+mt.highlightByRingAroundNode( partition ); // or [ subset ]
+mt.highlightBySquareAroundNode( partition ); // or [ subset ]
+```
+
 ## Making an SVG, PDF, or PNG
 
 This has not yet been implemented.
