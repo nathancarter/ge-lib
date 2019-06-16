@@ -111,6 +111,10 @@ const usage = () => console.log(
   + '         subgroups of the group, 0,1,...,k-1, for k subgroups.\n'
   + '         For a list of subgroups, see the usage\n'
   + '         "npm run ge-draw <group> list" documented above.\n'
+  + '       - Any reasonable initial substring of "conjugacy classes"\n'
+  + '         will highlight the group by its conjugacy classes\n'
+  + '         partition.\n'
+  + '       - Similar to the previous, "order classes" also works.\n'
   + '  - highlight-border\n'
   + '      In multiplication tables and cycle graphs, this is just\n'
   + '      like highlight-background, but works on cell/vertex\n'
@@ -394,6 +398,7 @@ if ( vizClassName == 'CayleyDiagram' && options.hasOwnProperty( 'arrowMargins' )
 }
 // highlighting
 const getHighlightingPartition = key => {
+    // support subgroup highlighting by index:
     if ( /^[0-9]+$/.test( options[key] ) ) {
         if ( options[key] >= group.subgroups.length ) {
             console.error( 'Invalid subgroup index:', options[key] );
@@ -401,6 +406,14 @@ const getHighlightingPartition = key => {
         }
         return [ group.subgroups[options[key]].members.toArray() ];
     }
+    // support highlighting by conjugacy classes:
+    const simpler = options[key].toLowerCase().replace( / /g, '' );
+    if ( simpler == 'conjugacyclasses'.substring( 0, simpler.length ) )
+        return group.conjugacyClasses.map( c => c.toArray() );
+    // support highlighting by order classes:
+    if ( simpler == 'orderclasses'.substring( 0, simpler.length ) )
+        return group.orderClasses.map( c => c.toArray() );
+    // support raw JSON of subsets or partial partitions:
     var arr = JSON.parse( options[key] );
     if ( !( arr instanceof Array ) ) {
         console.error( `${key} must be an array:`, options[key] );

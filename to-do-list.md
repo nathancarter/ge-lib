@@ -5,12 +5,6 @@
 
  * Add the following options/new signatures, adding help for each as
    you create the feature.
-    * `ge-draw <group> <viz> --highlight-<type>=<C>`: Where C is any
-      reasonable initial segment of the phrase "conjugacy classes",
-      highlight the conjugacy classes partition.
-    * `ge-draw <group> <viz> --highlight-<type>=<O>`: Where O is any
-      reasonable initial segment of the phrase "order classes",
-      highlight the order classes partition.
     * `ge-draw <group> <viz> --highlight-<type>=<H>-<n>`: Where H is any
       reasonable initial segment of the word "cosets" and n is an
       index into the list of subgroups, as with `--highlight-<type>=<n>`.
