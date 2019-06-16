@@ -4,11 +4,6 @@
 ## Cayley diagrams
 
  * To complete the API for everything you can do in GE with CDs:
-    * Add to the `.md` doc how to specify the strategies for
-      generating a CD (setStrategies() on an array of rows of the
-      generating table, each row is a length-4 array containing the
-      generator, layout (0/1/2=linear/circular/rotated), direction
-      (0/1/2=X/Y/Z or YZ/XZ/XY), and nesting level (0..nrows-1)).
     * Add to the `.md` doc how to specify the arrows the diagram
       shows:
 ```js
