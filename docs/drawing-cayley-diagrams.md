@@ -88,6 +88,26 @@ constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
  * `cameraUp` - same as for Symmetry Objects;
    [see documentation there](drawing-symmetry-objects.md#options)
 
+Whether you load a pre-defined Cayley diagram or have one generated for you,
+it will come with a default set of arrows that correspond to its layout.
+But you can add to or remove arrows from that set at your convenience, like
+so, after you're done with other settings, and before rendering:
+
+```js
+CD.removeLines(); // remove all arrows
+CD.addLines( 5 ); // add the arrow for element 5
+CD.addLines( 6 ); // add the arrow for element 6
+CD.setLineColors(); // give all arrows distinct colors
+```
+
+By default, arrows in a Cayley diagram signify right multiplication by an
+element.  You can alter this with one line of code, at any point before
+rendering:
+
+```js
+CD.right_multiplication = false;
+```
+
 ## A complete example
 
 We provide a minimal script that can create an SVG, PDF, or PNG file for a

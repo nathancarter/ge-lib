@@ -3,17 +3,6 @@
 
 ## Cayley diagrams
 
- * To complete the API for everything you can do in GE with CDs:
-    * Add to the `.md` doc how to specify the arrows the diagram
-      shows:
-```js
-cayleyDiagram.removeLines();
-cayleyDiagram.addLines( generator ); // repeat as needed
-cayleyDiagram.setLineColors();
-```
-    * Add to the `.md` doc how to specify whether arrows mean
-      left vs. right multiplication: by default,
-      `cd._right_multiplication` is true; you can set it to false.
  * Add features to the `CayleyDiagramRenderer` class that support the
    following features that we support in 3D diagrams in GE.
 ```js
