@@ -24,6 +24,8 @@
     * `ge-draw <group> <viz> --highlight-<type>=<H>-<n>`: Where H is any
       reasonable initial segment of the word "cosets" and n is an
       index into the list of subgroups, as with `--highlight-<type>=<n>`.
+    * Add support for "brighten" which will set the value of
+      "brightHighlights".  Also document that option for the first time.
 
 ## Finding groups
 
