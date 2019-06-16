@@ -8,20 +8,37 @@ This project exposes most of the core functionality of [Group Explorer
 extends its rendering capabilities to vector graphics formats (SVG, PDF) as
 well as PNG.
 
+It also provides a command-line interface to the same, so that you can
+generate vector graphics illustrations of group theory even if you do not
+want to write code.
+
 ## Status
 
-This is in early stages of development, and is far from complete. See the
-[to-do list](to-do-list.md).
+This is a beta release.  I think it's working pretty well, but you can try
+to find bugs and report them with the "issues" link above.
 
-Eventually, it should be possible to use these tools to programmatically
-load groups and create visualizations into formats like SVG, PNG, PDF,
-Asymptote, TikZ, etc.
+## Examples
 
-For now, we're just getting started.  Check back later!
+```
+$ ge-draw S_3 mult outfile=s3.png
+```
+
+![Multiplication table resulting from previous command](docs/s3.png)
+
+```
+$ ge-draw A_5 cayley fogLevel=0.9 nodeScale=3 outfile=a5.png \
+          diagram='Truncated icosahedron' showNames=false \
+          highlight-node=left-35
+```
+
+![Cayley diagram resulting from previous command](docs/a5.png)
 
 ## Documentation
 
-So far we are only about one-third done.  We will accumulate more here.
+For the command-line interface:
+ * [Using the command-line interface](docs/cli.md)
+
+For the node.js module:
  * [Basic API for this module](docs/basic-api.md)
  * [Drawing Cayley diagrams](docs/drawing-symmetry-objects.md)
  * [Drawing multiplication tables](docs/drawing-multiplication-tables.md)
