@@ -29,6 +29,7 @@ class CayleyDiagramRenderer extends ThreeRenderer {
                               line.vertices[i+1].point.y,
                               line.vertices[i+1].point.z,
                               new THREE.Color( line.color ),
+                              line.arrow,
                               arrowhead,
                               line.style == 1 );
             }

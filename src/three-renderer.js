@@ -56,10 +56,11 @@ class ThreeRenderer extends GroupRenderer {
     // To clear all vertices, use this:
     clearVertices () { this.vertices = [ ]; }
     // To add a line segment, provide starting and ending position, plus color,
+    // the element this arrow represents (optional, for symmetry objects),
     // and optionally whether it has an arrowhead (defaults to false)
     // and optionally whether it is curved (defaults to false)
     // and optionally curved group data for start and end points (defaults to undefined):
-    addLine ( x1, y1, z1, x2, y2, z2, c, a, cu, cg1, cg2 ) {
+    addLine ( x1, y1, z1, x2, y2, z2, c, elt, a, cu, cg1, cg2 ) {
         this.lines.push( {
             from : new THREE.Vector3( x1, y1, z1 ),
             to : new THREE.Vector3( x2, y2, z2 ),
@@ -67,7 +68,8 @@ class ThreeRenderer extends GroupRenderer {
             arrowhead : !!a,
             curved : !!cu,
             group1 : cg1,
-            group2 : cg2
+            group2 : cg2,
+            element : elt
         } );
     }
     // To clear all lines, use this:
@@ -190,10 +192,12 @@ class ThreeRenderer extends GroupRenderer {
     // This is abstract; subclasses should override.
     setupScene () { }
     // Internal-use functions to add lines to the scene:
+    defaultRadius () { return 0.3 / Math.sqrt( this.vertices.length ) };
     addVertexToScene ( vertex ) {
         const screenPos = this.projectVector3( vertex.pos );
-        const scale = this.viz.nodeScale / screenPos.z;
-        const defaultRadius = 75;
+        const scale = this.viz.nodeScale * ( vertex.r || this.defaultRadius() )
+                    / screenPos.z;
+        const defaultRadius = 500;
         const defaultStroke = 5;
         const ringScale = 1.2 * scale;
         const squareScale = 1.3 * scale;
@@ -246,6 +250,36 @@ class ThreeRenderer extends GroupRenderer {
         } );
     }
     addLineToScene( line ) {
+        // first determine whether we need to introduce curvature to avoid
+        // bumping other points.  this code imitates code from DisplayDiagram.js in GE.
+        if ( line.curved )
+            line.offset = ( line.offset === undefined ) ? 0.2 : line.offset;
+        const radius = this.viz.nodeScale
+                     * ( this.vertices[0].r || this.defaultRadius() ),
+              start2end = line.to.clone().sub( line.from ),
+              start2end_sq = line.from.distanceToSquared( line.to ),
+              start2end_len = Math.sqrt( start2end_sq ),
+              min_squared_distance = 1.5 * radius * radius;
+        this.vertices.map( vertex => {
+            const start2sphere = vertex.pos.clone().sub( line.from ),
+                  start2sphere_sq = line.from.distanceToSquared( vertex.pos ),
+                  end2sphere_sq = line.to.distanceToSquared( vertex.pos ),
+                  start2end_sq = line.from.distanceToSquared( line.to ),
+                  x = ( start2end_sq - end2sphere_sq + start2sphere_sq )
+                    / ( 2 * start2end_len ),
+                  normal = start2sphere.clone().sub(
+                      start2end.clone().multiplyScalar( x / start2end_len ) );
+            if (   start2sphere_sq != 0
+                && end2sphere_sq != 0
+                && x > 0
+                && x < start2end_len
+                && normal.lengthSq() < min_squared_distance )
+            {
+                line.offset = ( line.offset === undefined ) ?
+                    1.7 * radius / Math.sqrt( start2end_sq ) : line.offset;
+            }
+        } );
+
         // we will break lines or curves down into tiny segments.
         // here are functions that will add each segment to the scene.
         const defaultStroke = 2;
@@ -296,8 +330,7 @@ class ThreeRenderer extends GroupRenderer {
 
         // if the line is curved, figure that out now.
         var curveFunction;
-        if ( line.curved ) {
-            line.offset = ( line.offset === undefined ) ? 0.2 : line.offset;
+        if ( line.curved || line.offset > 0 ) {
             const middle = this.getControlPoint( line );
             curveFunction = t =>
                 line.from.clone().lerp( middle, t ).lerp(
@@ -336,7 +369,7 @@ class ThreeRenderer extends GroupRenderer {
         // add the line or curve to the scene, in one of two ways
         if ( this.viz.fogLevel == 0 ) {
             // there is no fog, so we can do a single line/curve piece
-            if ( line.curved ) {
+            if ( line.curved || line.offset > 0 ) {
                 addCubicBezierSegment( curvePoints( ledge, redge, 7 ),
                                        line.color );
             } else {
@@ -345,7 +378,7 @@ class ThreeRenderer extends GroupRenderer {
             }
         } else {
             // there is some fog, so we must do many little pieces
-            if ( line.curved ) {
+            if ( line.curved || line.offset > 0 ) {
                 for ( var t = ledge ; t < redge-step/2 ; t += step )
                     addCubicBezierSegment( curvePoints( ledge, redge, 7 ),
                                            line.color );
