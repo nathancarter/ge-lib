@@ -46,7 +46,7 @@ class CycleGraphRenderer extends GroupRenderer {
         return this.viz.group.elements.map( a => {
             const dims = this.representationSize( a );
             return Math.max( dims.w, dims.h );
-        } ).reduce( ( a, b ) => Math.max( a, b ) ) * 0.55;
+        } ).reduce( ( a, b ) => Math.max( a, b ), 35 ) * 0.55;
         // 0.55, because circle diameter = 1.1 * name size
     }
     // Expand the margins to be just bigger than the current radius.

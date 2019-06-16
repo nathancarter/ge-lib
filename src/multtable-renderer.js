@@ -12,7 +12,7 @@ class MulttableRenderer extends GroupRenderer {
         return this.viz.group.elements.map( a => {
             const dims = this.representationSize( a );
             return Math.max( dims.w, dims.h );
-        } ).reduce( ( a, b ) => Math.max( a, b ) ) * 1.1; // add 10% margin
+        } ).reduce( ( a, b ) => Math.max( a, b ), 35 ) * 1.1; // add 10% margin
     }
     // Given an element, find the position of its cell, which can be
     // interpreted in either of two (synonymous) ways:
