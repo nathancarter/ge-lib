@@ -1,12 +1,25 @@
 
 # Basic `ge-lib` API
 
+## Install the module
+
+You can install the module from npm.
+
+```
+$ npm install ge-lib
+```
+
+If you want to use the command-line interface, either install globally,
+modify your path, or run `npm link` after you've installed locally.
+
+But a local install is sufficient for accessing the module through node.
+
 ## Load the module
 
 To start using the module, load it the usual way.
 
 ```js
-const GE = require( 'ge-lib.js' );
+const GE = require( 'ge-lib' );
 ```
 
 ## See what groups it knows
