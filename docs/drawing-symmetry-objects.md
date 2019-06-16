@@ -80,6 +80,11 @@ constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
    (0,1,0) is assumed.  If you like, you may also provide `cameraUp` in the
    same format as `cameraPos`.  This setting is ignored if you do not provide
    `cameraPos`.
+ * `arrowMargins` - If you provide a nonnegative floating point value here
+   (default is 0.05) then arrows (lines or curves, with or without arrows)
+   between vertices will not quite touch the vertices, but leave this much
+   space instead.  This helps with legibility if the vertices are labeled,
+   and also helps give a sense of depth if the diagram is 3D.
 
 ## A complete example
 

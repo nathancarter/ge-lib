@@ -30,7 +30,7 @@ class ThreeRenderer extends GroupRenderer {
         // generated diagrams are treated differently than hard-coded diagrams.
         // It's a hack, sorry.  Set it to -1 for generated Cayley diagrams.
         this.yzscale = 1;
-        this.set( 'arrowMargins', 0 ); // range: [0,0.5)
+        this.set( 'arrowMargins', 0.05 ); // range: [0,?)
         this.set( 'arrowheadSize', 0.1 ); // range: (0,1)
         this.set( 'showNames', true ); // boolean
         this.set( 'brightHighlights', 0 ); // range: [0,1]==[none,max]

@@ -104,6 +104,8 @@ constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
    [see documentation there](drawing-symmetry-objects.md#options)
  * `cameraUp` - same as for Symmetry Objects;
    [see documentation there](drawing-symmetry-objects.md#options)
+ * `arrowMargin` - same as for Symmetry Objects;
+   [see documentation there](drawing-symmetry-objects.md#options)
 
 Whether you load a pre-defined Cayley diagram or have one generated for you,
 it will come with a default set of arrows that correspond to its layout.
