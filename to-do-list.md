@@ -43,12 +43,3 @@
 
 Don't forget to document the rest of the `GE.IsomorphicGroups` features
 as well.
-
-## Known issues
-
- * `mathml2text` does not work because no `XSLTProcessor` is
-   available.  I couldn't find an equivalent tool on npm,
-   though some things are close to what's needed.  (The best
-   one seems to process strings instead of XML trees and/or
-   DOM hierarchies.)  Thankfully so far I haven't needed this,
-   because `mathjax-node` has been doing everthing I need.
