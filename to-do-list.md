@@ -6,9 +6,6 @@
  * Fill in the section on installing the CLI
     * Publish on npm
     * Write down that people should `npm install -g ge-lib`
- * Move the usage docs out of the `cli.js` into a text file.
- * Fill in the section on documentation of all options by linking to that
-   text file.
 
 ## Finding groups
 

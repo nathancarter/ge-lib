@@ -10,4 +10,5 @@ Two examples of using the interface appear in
 
 ## Reference of all options
 
-(Documentation coming soon.)
+See [the usage output](../cli-usage.txt) that `ge-draw` prints
+if you run it with no arguments.

@@ -1,0 +1,147 @@
+
+ge-draw command
+---------------
+
+Usage:
+  - npm run ge-draw
+      Prints this help message
+  - npm run ge-draw <group> <type> [options]
+      Render a visualization of the given group.
+      The visualization will be of the given type.
+      Valid types are Cayley diagram, multiplication table,
+      symmetry object, and cycle graph.  Case insensitive,
+      shortcuts permitted.
+      Output goes to the file <group>.svg.
+      Example: npm run ge-draw Z_4 mult
+      See below for other options.
+  - npm run ge-draw list
+      Do not draw anything.  Instead, list all valid names
+      of groups that can be passed to ge-draw, then exit.
+  - npm run ge-draw <group> list
+      Do not draw anything.  Instead, list useful details
+      about the specified group.
+
+Options:
+  - outfile
+      The name of the file in which to save the output.
+      Must end in .svg, .pdf, or .png.
+  - cameraPos
+      The location of the camera when viewing a 3D object.
+      Must be valid JSON describing an [x,y,z] array.
+      The camera always looks at the origin.
+  - cameraUp
+      The vector in 3D space that is "up" to the camera.
+      Must be valid JSON describing an [x,y,z] array.
+      The camera always looks at the origin.
+  - zoomLevel
+      How much to zoom in if viewing a 3D object (default 1).
+      Valid values are positive floating point numbers.
+  - lineWidth
+      Thickness of lines in a 3D scene (default 7).
+      Valid values are positive floating point numbers.
+  - nodeScale
+      Scaling factor applied to each node in a 3D object.
+      It is multiplicative, with default 1, no change.
+      Valid values are positive floating point numbers.
+  - fogLevel
+      Amount of white fog to include in a 3D scene, to
+      show depth in 3D objects.
+      Valid values are floats in the interval [0,1].
+  - elements
+      The order in which to include the group elements in a
+      multiplication table.  This should be the JSON for an
+      array containing a permutation of 0,1,...,n-1, where n
+      is the order of the group, with 0 in the first position.
+  - separation
+      In a multiplication table, if a subgroup size is given,
+      this is the amount of space to leave in between cosets
+      of that subgroup, to show a quotient operation.
+      May be any nonnegative value; one unit is the width of
+      a single cell of the table.  Only works if stride is
+      also specified (the subgroup size).
+  - stride
+      In a multiplication table, this can be used to specify
+      the size of a subgroup by which to quotient the table.
+      This means that the subgroup and its cosets will be
+      visually chunked with space between to separate them.
+      You should provide here a positive integer that divides
+      the group order and is the size of a subgroup by which
+      you've organized the table (using "elements").  If not,
+      this will not behave sensibly.  See "separation."
+  - coloration
+      Scheme for colorizing a multiplication table.  One of:
+      rainbow, grayscale, none.  (Default is rainbow.)
+  - arrows
+      In a Cayley diagram, you may set this value to a JSON
+      array of the elements that should be drawn as arrows
+      in the diagram.
+  - arrowColors
+      In a Cayley diagram, you may set this value to a JSON
+      array of strings of HTML colors (e.g., "red", "#ffcc00")
+      to set the colors of the arrows in the diagram.  This
+      must have the same length as the number of arrow types.
+  - arrowheadPlacement
+      In a Cayley diagram, this can be any number in the
+      range [0,1].  It indicates the point on an arrow where
+      the arrowhead will be placed, 0 for the source, 1 for
+      the destination, 0.5 for the midpoint, etc.
+  - showNames
+      In a Cayley diagram, whether to include element names.
+      Defaults to true, but you can also use "false."
+  - arrowMargins
+      In a Cayley diagram, how much space to leave around the
+      nodes of a diagram as a margin, so that arrows between
+      nodes do not obscure nodes or their element names.
+      Positive floating point values only.  Default: 0.05.
+  - highlight-background
+      In multiplication tables and cycle graphs, this can
+      add highlighting to the background of a cell/vertex.
+      Acceptable values include:
+       - Any subset of the group's elements, as a JSON array,
+         such as [3,4,6].
+       - Any partition of the group's elements or a subset
+         thereof, as a JSON array, such as [[0,1],[4,5],[8]].
+       - Any nonnegative whole number index into the list of
+         subgroups of the group, 0,1,...,k-1, for k subgroups.
+         For a list of subgroups, see the usage
+         "npm run ge-draw <group> list" documented above.
+       - If k is an index into the list of subgroups as above,
+         and c is "right" or any reasonable initial segment,
+         then c-k highlights by the partition of the group by
+         the right cosets of subroup k.
+       - Same as previous, but "left" for left cosets.
+       - Any reasonable initial substring of "conjugacy classes"
+         will highlight the group by its conjugacy classes
+         partition.
+       - Similar to the previous, "order classes" also works.
+  - highlight-border
+      In multiplication tables and cycle graphs, this is just
+      like highlight-background, but works on cell/vertex
+      borders instead.
+  - highlight-corner
+      In multiplication tables, this is just like
+      highlight-background, but works on cell corners instead.
+  - highlight-top
+      In cycle graphs, this is just like
+      highlight-background, but works on vertex tops instead.
+  - highlight-node
+      In Cayley diagrams, this is just like
+      highlight-background does in multiplication tables.
+  - highlight-ring
+      In Cayley diagrams, this is just like highlight-node,
+      but creates a colored ring around the node instead.
+  - highlight-square
+      In Cayley diagrams, this is just like highlight-node,
+      but creates a colored square around the node instead.
+  - brighten
+      In a Cayley diagram without fog, some highlights can be
+      too dark.  Use this value (in the interval [0,1], with
+      default 0) to brighten them if necessary, to taste.
+  - diagram
+      Choose a Cayley diagram by name.  To see which names
+      are valid, see the usage "npm run ge-draw <group> list"
+      documented above.
+  - object
+      Choose a symmetry object by name.  To see which names
+      are valid, see the usage "npm run ge-draw <group> list"
+      documented above.
