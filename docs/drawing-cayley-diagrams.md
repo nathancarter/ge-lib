@@ -106,6 +106,12 @@ constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
    [see documentation there](drawing-symmetry-objects.md#options)
  * `arrowMargin` - same as for Symmetry Objects;
    [see documentation there](drawing-symmetry-objects.md#options)
+ * `brightHighlights` - a number in the range [0,1], defaulting to 0,
+   the amount by which to brighten any highlighting you have done to the
+   diagram.  For 3D diagrams, if you use fog, you probably do not want to
+   brighten the highlights at all, because the fog will do so.  For flat
+   diagrams, or ones without fog, you may wish to brighten the highlights
+   by setting this value to something in the range [0.25,0.5].
 
 Whether you load a pre-defined Cayley diagram or have one generated for you,
 it will come with a default set of arrows that correspond to its layout.
