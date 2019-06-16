@@ -41,9 +41,11 @@ class MulttableRenderer extends GroupRenderer {
         // loop through table rows
         this.viz.elements.map( ( rowelt, rowidx ) => {
             const rowpos = this.elementPosition( rowelt );
+            rowelt = this.viz.elements[rowelt];
             // loop through table columns
             this.viz.elements.map( ( colelt, colidx ) => {
                 const colpos = this.elementPosition( colelt );
+                colelt = this.viz.elements[colelt];
                 // compute element in that cell
                 const prod = this.viz.group.mult( rowelt, colelt );
                 // draw cell background
