@@ -3,12 +3,7 @@
 
 ## Cayley diagrams
 
- * Complete the "Properties of Cayley Diagrams" section of the documetation.
  * To complete the API for everything you can do in GE with CDs:
-    * Add to the `.md` doc how to create a named CD (and to get the
-      list of named CDs for a group).  Create by passing the name to
-      the `CayleyDiagram` constructor.  Get the list of names by
-      `group.cayleyDiagrams.map( d => d.name )`.
     * Add to the `.md` doc how to specify the strategies for
       generating a CD (setStrategies() on an array of rows of the
       generating table, each row is a length-4 array containing the
@@ -24,18 +19,16 @@ cayleyDiagram.setLineColors();
     * Add to the `.md` doc how to specify whether arrows mean
       left vs. right multiplication: by default,
       `cd._right_multiplication` is true; you can set it to false.
-    * Add to the `.md` doc how to specify whether to chunk: by
-      default, `cd.chunk` is undefined; you can set it to an index
-      into the strategy table.
- * Document those features that Cayley diagrams share with Symmetry
-   Objects, such as zoom, line width, etc.
  * Add features to the `CayleyDiagramRenderer` class that support the
-   following features that we support in 3D diagrams in GE.  Try
-   to do so in a way that is re-usabale for symmetry objects later.
+   following features that we support in 3D diagrams in GE.
 ```js
 cayleyDiagram.labelSize
 cayleyDiagram.arrowColors
 ```
+ * Support chunking, or document that you don't yet support it.
+    * Add to the `.md` doc how to specify whether to chunk: by
+      default, `cd.chunk` is undefined; you can set it to an index
+      into the strategy table.
 
 ## Command-line interface
 

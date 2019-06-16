@@ -70,21 +70,6 @@ resulting representation of the 3D scene.  Each is specified by calling
 constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
 `renderPNGFile()`.
 
- * `fogLevel` - between 0 and 1, 0 meaning no fog and 1 meaning maximal fog.
-   Fog causes more distant parts of the scene to fade into the background
-   and can be helpful for indicating depth in a static image.
-   The default is 0, but 3D objects often look better with this at about 0.75.
- * `zoomLevel` - the default is 1, values between 0 and 1 zoom out so that
-   the symmetry object is viewed with a large empty space around it, and
-   values greater than 1 zoom in; typically even 1.5 will clip some parts
-   of the object outside the borders of the resulting image.
- * `lineWidth` - the default is 5, and any value larger than 0 is acceptable.
-   The results are directly proportional to the value provided.
- * `nodeScale` - the default is 1, meaning to keep the nodes/vertices exactly
-   the same size they are defined in the diagram when it's loaded from the
-   group object.  If you provide a different factor here, it will make the
-   nodes proportionately larger or smaller by multiplying their radius by
-   this factor.  Values should be positive.
  * `cameraPos` - the default is undefined, which means that the renderer
    will make a sensible guess of where a good place to put the camera is.
    If you want to control it yourself, pass an object with `x`, `y`, and `z`
@@ -135,6 +120,29 @@ You can access the following properties of the `SymmetryObject` instance
           * `so.lines[i].vertices[j].y`
           * `so.lines[i].vertices[j].z`
        * `so.lines[i].color` - an HTML color string, such as `"#000000"`
+ * The zoom level of the camera, looking at the 3D diagram
+    * `so.zoomLevel` (defaults to 1)
+    * Values between 0 and 1 zoom out so that the symmetry object is viewed
+      with a large empty space around it, and values greater than 1 zoom
+      in; typically even 1.5 will clip some parts of the object outside the
+      borders of the resulting image.
+ * The thickness of the lines drawn in the diagram
+    * `so.lineWidth` (defaults to 7)
+    *  Any value larger than 0 is acceptable.
+       The results are directly proportional to the value provided.
+ * The scaling factor to apply to each node in the diagram
+    * `so.nodeScale` (defaults to 1)
+    *  The default keeps the nodes/vertices exactly the same size they are
+       defined in the diagram when it's loaded from the group object or
+       generated.  If you provide a different factor here, it will scale the
+       nodes by multiplying their radius by this factor.
+       Values should be positive.
+ * The amount of fog that appears in the 3D scene
+    * `so.fogLevel` (defaults to 0)
+    * Between 0 and 1, 0 meaning no fog and 1 meaning maximal fog.
+      Fog causes more distant parts of the scene to fade into the background
+      and can be helpful for indicating depth in a static image.
+      3D objects often look better with this between 0.75 and 0.9.
 
 ## Old example
 

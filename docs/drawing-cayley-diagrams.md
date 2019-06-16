@@ -29,7 +29,7 @@ To figure out what names are valid for a particular group, run code like
 this:
 
 ```js
-console.log( A_4.symmetryObjects.map( obj => obj.name ) );
+console.log( A_4.cayleyDiagrams.map( obj => obj.name ) );
 ```
 
 Or just use the first one (as long as there is at least one):
@@ -41,8 +41,6 @@ const cd = new GE.CayleyDiagram( A_4, A_4.cayleyDiagrams[0].name );
 ## Making an SVG, PDF, or PNG
 
 This has not yet been implemented.
-
-<!--
 
 To draw a Cayley diagram as an SVG, PDF, or PNG, create an instance of the
 `CayleyDiagramRenderer` class, passing your `CayleyDiagram` to the
@@ -71,8 +69,6 @@ simultaneously on the same object (`toBeDrawn`) and thus will be
 simultaneously manipulating its internal state, which can result in
 incorrect results.
 
--->
-
 ## Options
 
 You can set the following options that will be respected when rendering the
@@ -81,24 +77,12 @@ resulting representation of the 3D scene.  Each is specified by calling
 constructing it and before calling `renderSVGFile()`, `renderPDFFile()`, or
 `renderPNGFile()`.
 
- * `fogLevel` - same as for Symmetry Objects;
-   [see documentation there](drawing-symmetry-objects.md#options)
- * `zoomLevel` - same as for Symmetry Objects;
-   [see documentation there](drawing-symmetry-objects.md#options)
- * `lineWidth` - same as for Symmetry Objects;
-   [see documentation there](drawing-symmetry-objects.md#options)
- * `nodeScale` - same as for Symmetry Objects;
-   [see documentation there](drawing-symmetry-objects.md#options)
  * `cameraPos` - same as for Symmetry Objects;
    [see documentation there](drawing-symmetry-objects.md#options)
  * `cameraUp` - same as for Symmetry Objects;
    [see documentation there](drawing-symmetry-objects.md#options)
 
 ## A complete example
-
-Coming soon.
-
-<!--
 
 We provide a minimal script that can create an SVG, PDF, or PNG file for a
 Cayley diagram of a group, together with the resulting images.
@@ -108,19 +92,33 @@ Cayley diagram of a group, together with the resulting images.
  * [Result: `examples/cayley-diagram.pdf`](../examples/cayley-diagram.pdf)
  * [Result: `examples/cayley-diagram.png`](../examples/cayley-diagram.png)
 
--->
-
 ## Properties of Cayley diagrams
 
 You can access the following properties of the `CayleyDiagram` instance
 (not the `CayleyDiagramRenderer` instance).
 
- * This section of documentation is not yet complete.
+ * The name of the diagram, if it was one that was built into the group
+   definition in Group Explorer, as opposed to auto-generated
+    * `cd.diagram_name`
+ * The placement of arrowheads along the lines/curves on which they sit
+    * `cd.arrowheadPlacement` (defaults to 1)
+    * Set this to any value in the range 0 to 1.
+    * For example, 0.5 means the midpoint of the curve, and 1 means its end.
+ * The following properties are the same for Cayley diagrams as for
+   objects of symmetry; see
+   [the documentation there](drawing-symmetry-objects.md#properties-of-symmetry-objects)
+   for details.
+    * `cd.nodes`
+    * `cd.lines`
+    * `cd.zoomLevel`
+    * `cd.lineWidth`
+    * `cd.nodeScale`
+    * `cd.fogLevel`
 
 ## Old example
 
 The following example was provided before there was a way to actually draw
-symmetry objects with `SymmetryObjectRenderer`.  It is kept here merely for
+Cayley diagrams with `CayleyDiagramRenderer`.  It is kept here merely for
 reference.
 
 ```js
