@@ -223,7 +223,11 @@ class ThreeRenderer extends GroupRenderer {
             draw : () => {
                 this.canvas.circle( defaultRadius * 2 * scale )
                            .fill( color )
-                           .stroke( { color : 'black', width : defaultStroke * scale } )
+                           .stroke( {
+                               color : 'black',
+                               width : defaultStroke * scale
+                                     / ( vertex.r || this.defaultRadius() )
+                           } )
                            .move( screenPos.x - defaultRadius * scale,
                                   screenPos.y - defaultRadius * scale );
                 if ( typeof( vertex.element ) != 'undefined'
