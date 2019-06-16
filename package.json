@@ -19,6 +19,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "ge-draw": "./cli.js"
   },
+  "bin": {
+    "ge-draw": "./cli.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nathancarter/ge-lib.git"
