@@ -514,8 +514,9 @@ if ( vizClassName == 'CayleyDiagram'
 
 // render the group they requested to the file they requested
 try {
-    renderer[`render${fileType}File`]( options.outfile );
-    console.log( 'Rendered file:', options.outfile );
+    renderer[`render${fileType}File`]( options.outfile, () =>
+        console.log( 'Done.' ) );
+    console.log( 'Rendering file:', options.outfile );
 } catch ( e ) {
     console.error( 'Error rendering image:', e );
     process.exit( 1 );
