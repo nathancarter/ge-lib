@@ -237,8 +237,11 @@ class ThreeRenderer extends GroupRenderer {
                 if ( ringc )
                     this.canvas.circle( defaultRadius * 2 * ringScale )
                                .fill( 'none' )
-                               .stroke( { color : ringc,
-                                          width : defaultStroke * 3 * scale } )
+                               .stroke( {
+                                   color : ringc,
+                                   width : defaultStroke * 3 * scale
+                                         / ( vertex.r || this.defaultRadius() )
+                               } )
                                .move( screenPos.x - defaultRadius * ringScale,
                                       screenPos.y - defaultRadius * ringScale );
                 const squarec = getHL( 'square' );
@@ -246,8 +249,11 @@ class ThreeRenderer extends GroupRenderer {
                     this.canvas.rect( defaultRadius * 2 * squareScale,
                                       defaultRadius * 2 * squareScale )
                                .fill( 'none' )
-                               .stroke( { color : squarec,
-                                          width : defaultStroke * 3 * scale } )
+                               .stroke( {
+                                   color : squarec,
+                                   width : defaultStroke * 3 * scale
+                                         / ( vertex.r || this.defaultRadius() )
+                               } )
                                .move( screenPos.x - defaultRadius * squareScale,
                                       screenPos.y - defaultRadius * squareScale );
             }
