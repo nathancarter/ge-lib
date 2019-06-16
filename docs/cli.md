@@ -6,7 +6,13 @@ Two examples of using the interface appear in
 
 ## Installing the command-line tool
 
-(Documentation coming soon.)
+Very straightforward:
+
+```
+npm install -g ge-lib
+```
+
+Then you should have the `ge-draw` command in your path.
 
 ## Reference of all options
 

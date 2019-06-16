@@ -1,5 +1,5 @@
 
-# Group Explorer Module
+# Group Explorer Graphics from node or the command line
 
 ## Purpose
 

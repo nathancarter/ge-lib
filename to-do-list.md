@@ -1,12 +1,6 @@
 
 # To-do list
 
-## Improving documentation
-
- * Fill in the section on installing the CLI
-    * Publish on npm
-    * Write down that people should `npm install -g ge-lib`
-
 ## Finding groups
 
 Don't forget to document the rest of the `GE.IsomorphicGroups` features
