@@ -3,11 +3,6 @@
 
 ## Cayley diagrams
 
- * Add features to the `CayleyDiagramRenderer` class that support the
-   following features that we support in 3D diagrams in GE.
-```js
-cayleyDiagram.arrowColors
-```
  * Support chunking, or document that you don't yet support it.
     * Add to the `.md` doc how to specify whether to chunk: by
       default, `cd.chunk` is undefined; you can set it to an index

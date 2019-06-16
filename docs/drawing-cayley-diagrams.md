@@ -108,6 +108,16 @@ rendering:
 CD.right_multiplication = false;
 ```
 
+Also, at any time before calling `CD.setLineColors()`, you can specify
+which colors they should be, by assigning an array of strings to
+`CD.arrowColors`.  The strings can be any valid HTML color string, such as
+`"blue"`, `"#ff0066"`, or `"hsl(100,100%,50%)"`.
+
+```js
+CD.arrowColors = [ 'red', 'blue' ]; // assuming two generators...
+CD.setLineColors(); // give generators the distinct colors I just specified
+```
+
 ## A complete example
 
 We provide a minimal script that can create an SVG, PDF, or PNG file for a
