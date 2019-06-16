@@ -3,12 +3,45 @@
 // import all this module's functionality
 const GE = require( './index' );
 
+// define syntax help to print if they go wrong
+const usage = () => console.log(
+    'ge-lib drawing tool\n'
+  + '-------------------\n'
+  + '\n'
+  + 'Usage:\n'
+  + '  - npm run ge-draw\n'
+  + '      Prints this help message\n'
+  + '  - npm run ge-draw <group> <type> [options]\n'
+  + '      Render a visualization of the given group.\n'
+  + '      The visualization will be of the given type.\n'
+  + '      Valid types are Cayley diagram, multiplication table,\n'
+  + '      symmetry object, and cycle graph.  Case insensitive,\n'
+  + '      shortcuts permitted.\n'
+  + '      Output goes to the file <group>.svg.\n'
+  + '      Example: npm run ge-draw Z_4 mult\n'
+  + '      See below for other options.\n'
+  + '  - npm run ge-draw list\n'
+  + '      Do not draw anything.  Instead, list all valid names\n'
+  + '      of groups that can be passed to ge-draw, then exit.\n'
+  + '\n'
+  + 'Options:\n'
+  + '  (Documentation forthcoming.)\n'
+);
+
 // fetch command line arguments
 const [ groupName, typeName, ...rest ] = process.argv.slice( 2 );
+
+// if they just asked for the group list, give it and quit
+if ( groupName == 'list' ) {
+    GE.Library.allGroupNamesInFilesystem().map( path =>
+        console.log( path.split( '/' ).pop() ) );
+    process.exit( 0 );
+}
 
 // load the group they specified, or quit if you can't figure it out
 if ( groupName === undefined ) {
     console.error( 'No group specified.' );
+    usage();
     process.exit( 1 );
 }
 var group;
@@ -24,9 +57,10 @@ console.log( 'Loaded group:', group.URL );
 // or quit if you can't figure it out
 if ( typeName === undefined ) {
     console.error( 'No visualization type specified.' );
+    usage();
     process.exit( 1 );
 }
-const key = typeName.toLowerCase();
+const key = typeName.toLowerCase().replace( / /g, '' );
 var type = [
     [ 'CayleyDiagram', 'cd' ],
     [ 'Multtable', 'multiplicationtable', 'mt' ],

@@ -10,12 +10,10 @@
 
 ## Command-line interface
 
- * Add a help message for invalid syntax.
  * Add all options of the form `x=y`, resulting in a call to
    `renderer.set( x, y )`, plus add help on each.
  * Add the following options/new signatures, adding help for each as
    you create the feature.
-    * `ge-draw list`: List all groups in library and stop.
     * `ge-draw <group> list`: List all built-in visualizations
       (Cayley Diagrams and Objects of Symmetry), all elements (by
       index and primary representation) plus all subgroups, then stop.
