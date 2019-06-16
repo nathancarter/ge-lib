@@ -3,7 +3,6 @@
 
 ## Improving documentation
 
- * Fill in the section on examples for using the CLI.
  * Fill in the section on installing the CLI
     * Publish on npm
     * Write down that people should `npm install -g ge-lib`

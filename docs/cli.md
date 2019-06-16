@@ -1,11 +1,10 @@
 
 # Command-Line Interface
 
+Two examples of using the interface appear in
+[the README file](../README.md).
+
 ## Installing the command-line tool
-
-(Documentation coming soon.)
-
-## Example uses
 
 (Documentation coming soon.)
 
