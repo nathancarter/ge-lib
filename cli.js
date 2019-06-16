@@ -53,6 +53,29 @@ try {
 }
 console.log( 'Loaded group:', group.URL );
 
+// if they just asked me to list all the info I have about a group,
+// do that now and quit
+if ( typeName == 'list' ) {
+    console.log( 'Listing data about this group:', group.URL );
+    console.log( 'Cayley Diagrams:' );
+    if ( group.cayleyDiagrams.length == 0 )
+        console.log( '\tno built-in diagrams' );
+    else
+        group.cayleyDiagrams.map( cd => console.log( `\t${cd.name}` ) );
+    console.log( 'Symmetry Objects:' );
+    if ( group.symmetryObjects.length == 0 )
+        console.log( '\tnone' );
+    else
+        group.symmetryObjects.map( so => console.log( `\t${so.name}` ) );
+    console.log( 'Elements:' );
+    for ( var i = 0 ; i < group.order ; i++ )
+        console.log( `\t${i}. ${GE.mathml2text( group.representation[i] )}` );
+    console.log( 'Subgroups:' );
+    group.subgroups.map( ( subgroup, index ) =>
+        console.log( `\t${index}. ${subgroup.members.toArray()}` ) );
+    process.exit( 0 );
+}
+
 // determine which visualization type they specified,
 // or quit if you can't figure it out
 if ( typeName === undefined ) {

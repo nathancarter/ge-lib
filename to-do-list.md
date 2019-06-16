@@ -14,11 +14,6 @@
    `renderer.set( x, y )`, plus add help on each.
  * Add the following options/new signatures, adding help for each as
    you create the feature.
-    * `ge-draw <group> list`: List all built-in visualizations
-      (Cayley Diagrams and Objects of Symmetry), all elements (by
-      index and primary representation) plus all subgroups, then stop.
-      To do this, you will probably need to throw together a quick
-      replacement for `mathml2text`.
     * `ge-draw <group> <viz> --highlight-<type>=<n>`: Highlight
       subgroup #n with the given highlighting type.  Can be
       accompanied by `--highlight-color=<color>`, in any reasonable
