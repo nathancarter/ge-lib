@@ -30,11 +30,6 @@ class ThreeRenderer extends GroupRenderer {
         // generated diagrams are treated differently than hard-coded diagrams.
         // It's a hack, sorry.  Set it to -1 for generated Cayley diagrams.
         this.yzscale = 1;
-        this.set( 'fogLevel', 0 ); // range: [0,1]
-        this.set( 'zoomLevel', 1 ); // range unclear
-        this.set( 'lineWidth', 5 ); // must be >0
-        this.set( 'nodeScale', 1 ); // must be >0
-        this.set( 'arrowheadPlacement', 1 ); // range: [0,1]
         this.set( 'arrowMargins', 0 ); // range: [0,0.5)
         this.set( 'arrowheadSize', 0.1 ); // range: (0,1)
         this.set( 'showNames', true ); // boolean
@@ -108,7 +103,7 @@ class ThreeRenderer extends GroupRenderer {
         const w = this.get( 'width' );
         const h = this.get( 'height' );
         this.camera.aspect = w / h;
-        this.camera.zoom = this.get( 'zoomLevel' );
+        this.camera.zoom = this.viz.zoomLevel;
         this.camera.updateProjectionMatrix();
         // make it possible to project points to screen coordinates
         this.camera.updateMatrixWorld();
@@ -196,7 +191,7 @@ class ThreeRenderer extends GroupRenderer {
     // Internal-use functions to add lines to the scene:
     addVertexToScene ( vertex ) {
         const screenPos = this.projectVector3( vertex.pos );
-        const scale = this.get( 'nodeScale' ) / screenPos.z;
+        const scale = this.viz.nodeScale / screenPos.z;
         const defaultRadius = 75;
         const defaultStroke = 5;
         const ringScale = 1.2 * scale;
@@ -250,7 +245,7 @@ class ThreeRenderer extends GroupRenderer {
             const colorWithFog = this.adjustColor( line.color, midpt ).getHexString();
             const screenMidpt = this.projectVector3( midpt );
             screenMidpt.z += 0.01; // nudge
-            const scale = this.get( 'lineWidth' ) / screenMidpt.z;
+            const scale = this.viz.lineWidth / screenMidpt.z;
             const screenFrom = this.projectVector3( from );
             const screenTo = this.projectVector3( to );
             this.thingsToDraw.push( {
@@ -270,7 +265,7 @@ class ThreeRenderer extends GroupRenderer {
             const colorWithFog = this.adjustColor( line.color, midpt ).getHexString();
             const screenMidpt = this.projectVector3( midpt );
             screenMidpt.z += 0.01; // nudge
-            const scale = this.get( 'lineWidth' ) / screenMidpt.z;
+            const scale = this.viz.lineWidth / screenMidpt.z;
             const screenPoints = points.map( pt => this.projectVector3( pt ) )
                                        .map( pt => [ pt.x, pt.y ] );
             const C = fitter.fit( screenPoints );
@@ -330,7 +325,7 @@ class ThreeRenderer extends GroupRenderer {
 
         // generate many points along the line or curve...
         // add the line or curve to the scene, in one of two ways
-        if ( this.get( 'fogLevel' ) == 0 ) {
+        if ( this.viz.fogLevel == 0 ) {
             // there is no fog, so we can do a single line/curve piece
             if ( line.curved ) {
                 addCubicBezierSegment( curvePoints( ledge, redge, 7 ),
@@ -356,7 +351,7 @@ class ThreeRenderer extends GroupRenderer {
         // if it has an arrowhead, draw that last.
         if ( !line.arrowhead ) return;
         const arrowT = Math.min( redge, Math.max( ledge,
-            this.get( 'arrowheadPlacement' ) ) );
+            this.viz.arrowheadPlacement ) );
         const end = curveFunction( arrowT );
         const close = curveFunction( arrowT - 0.05 );
         const len = curveFunction( ledge ).distanceTo( curveFunction( redge ) );
@@ -375,7 +370,7 @@ class ThreeRenderer extends GroupRenderer {
         const oneSide = screenButt.clone().add( screenSideways );
         const otherSide = screenButt.clone().sub( screenSideways );
         const defaultLength = 4;
-        const scale = this.get( 'lineWidth' ) / depth;
+        const scale = this.viz.lineWidth / depth;
         this.thingsToDraw.push( {
             depth : depth,
             draw : () => {
@@ -394,13 +389,12 @@ class ThreeRenderer extends GroupRenderer {
     adjustColor ( original, position ) {
         const r = this.sceneRadius();
         const cameraDistance = this.camera.position.length();
-        const fogLevel = this.get( 'fogLevel' );
         // the next 4 lines come from GE's code, updateFogLevel() in
         // DisplayDiagram, so that we do here the same thing.
         const fogColor = this.bgcolor;
         const near = cameraDistance - r;
-        const far = ( fogLevel == 0 ) ? 100 :
-            ( cameraDistance + r * ( 5 - 4 * fogLevel ) );
+        const far = ( this.viz.fogLevel == 0 ) ? 100 :
+            ( cameraDistance + r * ( 5 - 4 * this.viz.fogLevel ) );
         const objectDistance = position.distanceTo( this.camera.position );
         const p = ( objectDistance - near ) / ( far - near );
         return new THREE.Color(
