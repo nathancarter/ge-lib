@@ -91,11 +91,11 @@ You can access the following properties of the `Multtable` object
 mt.organizeBySubgroup( group.subgroups[i] );
 ```
  * The color scheme to use for cell backgrounds, from a choice of three:
-    * Set `mt.coloration = Multtable.COLORATION_RAINBOW` for the default
+    * Set `mt.colors = Multtable.COLORATION_RAINBOW` for the default
       behavior, which colors elements from red through purple hues.
-    * Set `mt.coloration = Multtable.COLORATION_GRAYSCALE` to use shades
+    * Set `mt.colors = Multtable.COLORATION_GRAYSCALE` to use shades
       of gray instead.
-    * Set `mt.coloration = Multtable.COLORATION_NONE` to use no background
+    * Set `mt.colors = Multtable.COLORATION_NONE` to use no background
       colors for cells.
 
 ## Old example
