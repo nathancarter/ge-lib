@@ -3,8 +3,6 @@
 
 ## Command-line interface
 
- * Add all options of the form `x=y`, resulting in a call to
-   `renderer.set( x, y )`, plus add help on each.
  * Add the following options/new signatures, adding help for each as
    you create the feature.
     * `ge-draw <group> <viz> --highlight-<type>=<n>`: Highlight
