@@ -107,6 +107,10 @@ const usage = () => console.log(
   + '         such as [3,4,6].\n'
   + '       - Any partition of the group\'s elements or a subset\n'
   + '         thereof, as a JSON array, such as [[0,1],[4,5],[8]].\n'
+  + '       - Any nonnegative whole number index into the list of\n'
+  + '         subgroups of the group, 0,1,...,k-1, for k subgroups.\n'
+  + '         For a list of subgroups, see the usage\n'
+  + '         "npm run ge-draw <group> list" documented above.\n'
   + '  - highlight-border\n'
   + '      In multiplication tables and cycle graphs, this is just\n'
   + '      like highlight-background, but works on cell/vertex\n'
@@ -390,6 +394,13 @@ if ( vizClassName == 'CayleyDiagram' && options.hasOwnProperty( 'arrowMargins' )
 }
 // highlighting
 const getHighlightingPartition = key => {
+    if ( /^[0-9]+$/.test( options[key] ) ) {
+        if ( options[key] >= group.subgroups.length ) {
+            console.error( 'Invalid subgroup index:', options[key] );
+            process.exit( 1 );
+        }
+        return [ group.subgroups[options[key]].members.toArray() ];
+    }
     var arr = JSON.parse( options[key] );
     if ( !( arr instanceof Array ) ) {
         console.error( `${key} must be an array:`, options[key] );

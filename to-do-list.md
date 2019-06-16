@@ -5,8 +5,6 @@
 
  * Add the following options/new signatures, adding help for each as
    you create the feature.
-    * `ge-draw <group> <viz> --highlight-<type>=<n>`: Highlight
-      subgroup #n with the given highlighting type.
     * `ge-draw <group> <viz> --highlight-<type>=<C>`: Where C is any
       reasonable initial segment of the phrase "conjugacy classes",
       highlight the conjugacy classes partition.
