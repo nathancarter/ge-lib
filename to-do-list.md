@@ -10,10 +10,8 @@
 
 ## Command-line interface
 
- * Add one option, the output file name, from which the
-   file type is discerned (SVG/PDF/PNG).
- * Add `ge-draw --help` that prints a help message.
- * Add all options of the form `--x=y`, resulting in a call to
+ * Add a help message for invalid syntax.
+ * Add all options of the form `x=y`, resulting in a call to
    `renderer.set( x, y )`, plus add help on each.
  * Add the following options/new signatures, adding help for each as
    you create the feature.
