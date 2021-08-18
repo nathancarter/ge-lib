@@ -1,9 +1,6 @@
 
 # Drawing Cayley Diagrams
 
-This file will document how to use `ge-lib.js` to draw Cayley diagrams.
-But it does not yet do so, because that feature is not yet implemented.
-
 This file expects that you have read the
 [Basic API](basic-api.md) document.
 
