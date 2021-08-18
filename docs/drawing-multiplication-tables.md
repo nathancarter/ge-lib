@@ -96,37 +96,3 @@ mt.organizeBySubgroup( group.subgroups[i] );
       of gray instead.
     * Set `mt.colors = Multtable.COLORATION_NONE` to use no background
       colors for cells.
-
-## Old example
-
-The following example was provided before there was a way to actually draw
-multiplication tables with `MulttableRenderer`.  It is kept here merely for
-reference.
-
-```js
-const dumpMultTable = mt => {
-    console.log( `Multiplication Table for "${mt.group.shortName}"`
-               + ` (${mt.size}x${mt.size}):` );
-    for ( var i = 0 ; i < mt.group.order ; i++ ) {
-        const row = mt.elements[i], rowpos = mt.position( i );
-        var content = [ ], dims = [ ],
-            colors = [ ], borders = [ ], corners = [ ];
-        for ( var j = 0 ; j < mt.group.order ; j++ ) {
-            const col = mt.elements[j], colpos = mt.position( j );
-            const prod = mt.group.mult( row, col );
-            content.push( `(${i},${j}): ${prod}` );
-            dims.push( `1x1 @ (${rowpos},${colpos})` );
-            colors.push( mt.colors[prod] );
-            if ( mt.borders ) borders.push( mt.borders[prod] );
-            if ( mt.corners ) corners.push( mt.corners[prod] );
-        }
-        console.log( `\t${content.join( '\t\t' )}` );
-        console.log( `\t${dims.join( '\t\t' )}` );
-        console.log( `\t${colors.join( '\t' )}` );
-        if ( mt.borders ) console.log( `\t${borders.join( '\t\t' )}` );
-        if ( mt.corners ) console.log( `\t${corners.join( '\t\t' )}` );
-        if ( i < mt.group.order - 1 )
-            console.log( `\t${colors.map( _ => '---' ).join( '\t\t\t' )}` );
-    }
-};
-```
