@@ -1,9 +1,6 @@
 
 # Drawing Multiplication Tables
 
-This file will document how to use `ge-lib.js` to draw multiplication
-tables.
-
 This file expects that you have read the
 [Basic API](basic-api.md) document.
 
