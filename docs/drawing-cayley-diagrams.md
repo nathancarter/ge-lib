@@ -60,8 +60,6 @@ mt.highlightBySquareAroundNode( partition ); // or [ subset ]
 
 ## Making an SVG, PDF, or PNG
 
-This has not yet been implemented.
-
 To draw a Cayley diagram as an SVG, PDF, or PNG, create an instance of the
 `CayleyDiagramRenderer` class, passing your `CayleyDiagram` to the
 constructor.
