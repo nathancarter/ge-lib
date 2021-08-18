@@ -1,7 +1,7 @@
 
 # Drawing Symmetry Objects
 
-This file will document how to use `ge-lib.js` to draw symmetry objects.
+This file documents how to use `ge-lib.js` to draw symmetry objects.
 
 This file expects that you have read the
 [Basic API](basic-api.md) document.
