@@ -121,37 +121,3 @@ You can access the following properties of the `CycleGraph` object (not the
       have many vertices, and we place a path to connect each
       successive pair)
        * `cg.cyclePaths[i].pathIndex`
-
-## Old example
-
-The following example was provided before there was a way to actually draw
-cycle graphs with `CycleGraphRenderer`.  It is kept here merely for
-reference.
-
-```js
-const dumpCycleGraph = ( cg, precision = 3 ) => {
-    const f = n => Number( n ).toFixed( precision );
-    console.log( `Cycle graph for "${cg.group.shortName}":` );
-    console.log( `\tBounding box: (${f(cg.bbox.left)},${f(cg.bbox.top)})--`
-               + `(${f(cg.bbox.right)},${f(cg.bbox.bottom)})` );
-    console.log( '\tElement positions:' );
-    cg.group.elements.map( a => {
-        const x = cg.positions[a].x;
-        const y = cg.positions[a].y;
-        var color = '';
-        if ( cg.highlights.background )
-            color += ', bkgd:' + cg.highlights.background[a];
-        if ( cg.highlights.border )
-            color += ', bord:' + cg.highlights.border[a];
-        if ( cg.highlights.top )
-            color += ', top:' + cg.highlights.top[a];
-        console.log( `\t\t${a} is at (${f(x)},${f(y)})${color}` );
-    } );
-    cg.cyclePaths.map( path => {
-        console.log( `\tPart ${path.partIndex}, Cycle ${path.cycleIndex} `
-                   + `(${path.cycle.join(',')}), Path ${path.pathIndex}:` );
-        console.log( '\t\t' + path.map( point =>
-            `(${f(point.x)},${f(point.y)})` ).join( '--' ) );
-    } );
-};
-```
