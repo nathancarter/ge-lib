@@ -148,25 +148,3 @@ You can access the following properties of the `SymmetryObject` instance
       Fog causes more distant parts of the scene to fade into the background
       and can be helpful for indicating depth in a static image.
       3D objects often look better with this between 0.75 and 0.9.
-
-## Old example
-
-The following example was provided before there was a way to actually draw
-symmetry objects with `SymmetryObjectRenderer`.  It is kept here merely for
-reference.
-
-```js
-const dumpSymmetryObject = ( so, precision = 3 ) => {
-    const f = n => Number( n ).toFixed( precision );
-    console.log( `Symmetry object ${so.name} for "${so.group.shortName}":` );
-    so.nodes.map( node => {
-        console.log( `\t${node.color} (${f(node.point.x)},${f(node.point.y)},${f(node.point.z)}) `
-                   + `r=${node.radius}` );
-    } );
-    so.lines.map( line => {
-        console.log( `\t${line.color} ` + line.vertices.map( pt =>
-            `(${f(pt.point.x)},${f(pt.point.y)},${f(pt.point.z)})`
-        ).join( line.arrowhead ? '->' : '--' ) );
-    } );
-};
-```
