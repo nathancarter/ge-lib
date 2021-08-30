@@ -12,7 +12,7 @@
     "random-seed": "^0.3.0",
     "svgdom": "0.0.20",
     "tempfile": "^3.0.0",
-    "three": "^0.104.0"
+    "three": "^0.125.0"
   },
   "devDependencies": {},
   "scripts": {
